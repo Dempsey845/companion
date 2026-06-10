@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dena2tp786tpj"]
 
 [ext_resource type="PackedScene" uid="uid://ddp7y8rwb1paa" path="res://Entity/Player/player.tscn" id="1_a02cp"]
+[ext_resource type="Material" uid="uid://by0xvtseco15u" path="res://Prototype/prototype_grid.tres" id="2_go701"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a02cp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -25,8 +26,27 @@ shadow_enabled = true
 environment = SubResource("Environment_5a7ea")
 
 [node name="Player" parent="." unique_id=1685154727 instance=ExtResource("1_a02cp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=582157499]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=1569243694]
 use_collision = true
-size = Vector3(10, 1, 10)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=2129844525]
+size = Vector3(20, 1, 15)
+material = ExtResource("2_go701")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D/CSGBox3D" unique_id=500347655]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4, 0.3, -2)
+operation = 2
+size = Vector3(6, 1, 5)
+material = ExtResource("2_go701")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="CSGCombiner3D" unique_id=1931672307]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.160458)
+polygon = PackedVector2Array(-1.9, 0.4, 0, 1, 3.6000001, 1.7, 3.5, 0.5)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1503211050]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9, 0.19999999, -1.6999998)
+operation = 2
+radius = 1.9
+material = ExtResource("2_go701")
