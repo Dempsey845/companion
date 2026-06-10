@@ -13,12 +13,19 @@ var move: bool:
 		return _move
 	set(value):
 		_move = value
+		
+		if value:
+			clear_look_target()
 
 var gravity: float = 9.8
 var next_position: Vector3
 
+var look_target_position: Vector3
+var has_look_target := false
+
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var forward_ray: RayCast3D = $ForwardRay
+
 
 func _physics_process(delta: float):
 	_try_apply_gravity(delta)
@@ -27,6 +34,11 @@ func _physics_process(delta: float):
 		_move_towards_target_position(delta)
 	else:
 		_stop_moving(delta)
+	
+	if has_look_target:
+		face_target_position(delta)
+	else:
+		face_movement_direction(delta)
 	
 	move_and_slide()
 
@@ -41,8 +53,6 @@ func _move_towards_target_position(delta: float):
 	_handle_obstacles()
 
 	_move_to_next_position(delta)
-
-	face_movement_direction(delta)
 
 func _try_apply_gravity(delta: float):
 	if not is_on_floor():
@@ -88,6 +98,31 @@ func _move_to_next_position(delta: float):
 		velocity.z,
 		direction.z * speed,
 		acceleration * delta
+	)
+
+func look_at_point(point: Vector3):
+	look_target_position = point
+	has_look_target = true
+
+func clear_look_target():
+	has_look_target = false
+
+func face_target_position(delta: float):
+	var direction = look_target_position - global_position
+	direction.y = 0
+
+	if direction.length_squared() < 0.01:
+		return
+
+	var target_rotation = atan2(
+		-direction.x,
+		-direction.z
+	)
+
+	rotation.y = lerp_angle(
+		rotation.y,
+		target_rotation,
+		8.0 * delta
 	)
 
 func face_movement_direction(delta: float):

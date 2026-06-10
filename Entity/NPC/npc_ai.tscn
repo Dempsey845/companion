@@ -41,6 +41,7 @@ wait_time = 0.2
 
 [node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093]
 script = ExtResource("5_wfllg")
+wander_type = 1
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
 [node name="WaitTimer" type="Timer" parent="StateMachine/WanderState" unique_id=2079812908]

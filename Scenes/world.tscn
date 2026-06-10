@@ -4,6 +4,8 @@
 [ext_resource type="Material" uid="uid://by0xvtseco15u" path="res://Prototype/prototype_grid.tres" id="2_go701"]
 [ext_resource type="Material" uid="uid://dt44nra4gjpf" path="res://Prototype/red_prototype_grid.tres" id="3_5a7ea"]
 [ext_resource type="PackedScene" uid="uid://bnv8sb0jefmtj" path="res://Entity/NPC/npc_ai.tscn" id="4_8j60k"]
+[ext_resource type="Script" uid="uid://b4r82gll5mico" path="res://Singleton/points_of_interest.gd" id="5_5ukr8"]
+[ext_resource type="Script" uid="uid://dsnnflyfh225g" path="res://Entity/NPC/point_of_interest.gd" id="5_fo5ed"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a02cp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -97,5 +99,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -6)
 
 [node name="ChaseState" parent="NPC_AI/StateMachine" parent_id_path=PackedInt32Array(1515252757, 2095926968) index="1" unique_id=969530027 node_paths=PackedStringArray("target")]
 target = NodePath("../../../Player")
+
+[node name="WanderState" parent="NPC_AI/StateMachine" parent_id_path=PackedInt32Array(1515252757, 2095926968) index="2" unique_id=1982750093 node_paths=PackedStringArray("points_of_interest")]
+points_of_interest = NodePath("../../../PointsOfInterest")
+
+[node name="PointsOfInterest" type="Node3D" parent="." unique_id=280479569]
+script = ExtResource("5_5ukr8")
+
+[node name="PointOfInterest" type="Marker3D" parent="PointsOfInterest" unique_id=1475010119]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -2)
+script = ExtResource("5_fo5ed")
+metadata/_custom_type_script = "uid://dsnnflyfh225g"
+
+[node name="PointOfInterest2" type="Marker3D" parent="PointsOfInterest" unique_id=625060244]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7, 2.9, 6.5)
+script = ExtResource("5_fo5ed")
+observation_duration = 5.0
+metadata/_custom_type_script = "uid://dsnnflyfh225g"
+
+[node name="PointOfInterest3" type="Marker3D" parent="PointsOfInterest" unique_id=779991221]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7, 0.9000001, -2.0872955)
+script = ExtResource("5_fo5ed")
+observation_duration = 3.0
+metadata/_custom_type_script = "uid://dsnnflyfh225g"
 
 [editable path="NPC_AI"]
