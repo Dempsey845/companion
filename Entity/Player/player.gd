@@ -30,20 +30,20 @@ func _unhandled_input(event):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _physics_process(delta: float):
-	try_apply_gravity(delta)
+	_try_apply_gravity(delta)
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = jump_velocity
 
-	handle_movement()
+	_handle_movement()
 
 	move_and_slide()
 
-func try_apply_gravity(delta: float):
+func _try_apply_gravity(delta: float):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
-func handle_movement():
+func _handle_movement():
 	var speed = walk_speed
 	if Input.is_action_pressed("sprint"):
 		speed = sprint_speed

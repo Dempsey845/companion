@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://ddp7y8rwb1paa" path="res://Entity/Player/player.tscn" id="1_a02cp"]
 [ext_resource type="Material" uid="uid://by0xvtseco15u" path="res://Prototype/prototype_grid.tres" id="2_go701"]
 [ext_resource type="Material" uid="uid://dt44nra4gjpf" path="res://Prototype/red_prototype_grid.tres" id="3_5a7ea"]
+[ext_resource type="PackedScene" uid="uid://bnv8sb0jefmtj" path="res://Entity/NPC/npc_ai.tscn" id="4_8j60k"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a02cp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -17,6 +18,10 @@ sky = SubResource("Sky_go701")
 tonemap_mode = 2
 glow_enabled = true
 
+[sub_resource type="NavigationMesh" id="NavigationMesh_5a7ea"]
+vertices = PackedVector3Array(-11, 6, 8, -10, 6, 8, -10.5, 6, 7.5, -10.5, 6, -6.25, -10, 6, -8, -11, 6, -8, 3.75, 1, -2.5, 5, 1, -3.75, 5, 1, -6.75, -1.75, 1, -4.75, -1.5, 1, -0.5, -9.25, 1, 0.5, -8.25, 1, 0.25, -8, 1, -4.75, -9.25, 1, -6.75, 4, 1, -0.75, 8, 1, 4.5, 8.25, 1, 7, 9.5, 1, 7, 9.5, 1, -6.75, 8, 1, -2.5, 7.75, 1, -0.25, 6.25, 1, -4, 7.5, 1, -3.5, 5.5, 1, 0.5, 5.5, 1, 4.5, -7.25, 0.25, -3.75, -7.25, 0.25, 1, -2.5, 0.25, 1, -2.5, 0.25, -3.75, 4.25, 1, 0, -1.5, 1, 1.75, -0.75, 1, 4.25, -8, 1, 2, -9.25, 1, 7, -1, 1.25, 5.25, 7.25, 2.75, 6.75, 7.25, 2.75, 5.5, -2.375, 1, 6.895833, 1.75, 2.25, 6.833333, 1.75, 2.25, 5.333333, 4, 1, 5.75, 4, 1, 6.5, 7, 1, 6.5, 7, 1, 5.75)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(5, 4, 3), PackedInt32Array(2, 0, 3), PackedInt32Array(3, 0, 5), PackedInt32Array(7, 6, 8), PackedInt32Array(8, 6, 9), PackedInt32Array(9, 6, 10), PackedInt32Array(12, 11, 13), PackedInt32Array(13, 11, 14), PackedInt32Array(13, 14, 9), PackedInt32Array(9, 14, 8), PackedInt32Array(6, 15, 10), PackedInt32Array(17, 16, 18), PackedInt32Array(18, 16, 21), PackedInt32Array(18, 21, 20), PackedInt32Array(18, 20, 19), PackedInt32Array(22, 7, 8), PackedInt32Array(22, 8, 23), PackedInt32Array(23, 8, 19), PackedInt32Array(25, 24, 16), PackedInt32Array(16, 24, 21), PackedInt32Array(20, 23, 19), PackedInt32Array(29, 28, 26), PackedInt32Array(26, 28, 27), PackedInt32Array(30, 24, 25), PackedInt32Array(31, 10, 32), PackedInt32Array(32, 10, 15), PackedInt32Array(32, 15, 30), PackedInt32Array(32, 30, 25), PackedInt32Array(12, 33, 11), PackedInt32Array(11, 33, 34), PackedInt32Array(32, 35, 31), PackedInt32Array(31, 35, 33), PackedInt32Array(33, 35, 34), PackedInt32Array(36, 39, 37), PackedInt32Array(37, 39, 40), PackedInt32Array(40, 39, 35), PackedInt32Array(35, 39, 38), PackedInt32Array(35, 38, 34), PackedInt32Array(44, 43, 41), PackedInt32Array(41, 43, 42)]
+
 [node name="World" type="Node3D" unique_id=1436973986]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1134517119]
@@ -26,35 +31,66 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=362494447]
 environment = SubResource("Environment_5a7ea")
 
-[node name="Player" parent="." unique_id=1685154727 instance=ExtResource("1_a02cp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=1371247589]
+navigation_mesh = SubResource("NavigationMesh_5a7ea")
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=1569243694]
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="NavigationRegion3D" unique_id=1569243694]
 use_collision = true
+collision_layer = 2
+collision_mask = 15
 
-[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=2129844525]
-size = Vector3(20, 1, 15)
-material = ExtResource("2_go701")
-
-[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D/CSGBox3D" unique_id=500347655]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4, 0.3, -2)
-operation = 2
-size = Vector3(6, 1, 5)
-material = ExtResource("2_go701")
-
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="CSGCombiner3D" unique_id=1931672307]
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="NavigationRegion3D/CSGCombiner3D" unique_id=1931672307]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.160458)
 polygon = PackedVector2Array(-2.1000001, 0.5, 0, 1.2, 3.5, 2.3, 3.5, 0.5)
 depth = 2.17
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1503211050]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9, 0.19999999, -1.6999998)
+[node name="CSGBox3D3" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D" unique_id=1174435934]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 2.5, 0)
+size = Vector3(22, 6, 17)
+material = ExtResource("2_go701")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D/CSGBox3D3" unique_id=2129844525]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.54999995, 0)
+operation = 2
+size = Vector3(20, 5.1, 15)
+material = ExtResource("2_go701")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D/CSGBox3D3" unique_id=750241219]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, -2.1000001, -1.5)
+operation = 2
+size = Vector3(6, 1, 6)
+material = ExtResource("3_5a7ea")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="NavigationRegion3D/CSGCombiner3D/CSGBox3D3" unique_id=1503211050]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.4, -2.3, -1.6999998)
 operation = 2
 radius = 1.9
 material = ExtResource("2_go701")
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D" unique_id=2133305650]
+[node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D" unique_id=2133305650]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5019145, 1.4000001, 6.1)
 material_override = ExtResource("3_5a7ea")
 size = Vector3(4.1, 1.8000001, 2.2)
 material = ExtResource("3_5a7ea")
+
+[node name="NavigationLink3D" type="NavigationLink3D" parent="NavigationRegion3D" unique_id=55808691]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+start_position = Vector3(1.05, 0.5, 0)
+end_position = Vector3(-0.985, -0.09, 0)
+
+[node name="NavigationLink3D2" type="NavigationLink3D" parent="NavigationRegion3D" unique_id=1864604751]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -3.536772)
+start_position = Vector3(1.05, 0.5, 0)
+end_position = Vector3(-0.985, -0.09, 0)
+
+[node name="NavigationLink3D3" type="NavigationLink3D" parent="NavigationRegion3D" unique_id=1199638566]
+transform = Transform3D(-0.9873502, 0, -0.15855451, 0, 1, 0, 0.15855451, 0, -0.9873502, -7.899724, 0, -1.7917402)
+start_position = Vector3(1.05, 0.5, 0)
+end_position = Vector3(-0.985, -0.09, 0)
+
+[node name="Player" parent="." unique_id=1685154727 instance=ExtResource("1_a02cp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="NPC_AI" parent="." unique_id=1515252757 node_paths=PackedStringArray("target") instance=ExtResource("4_8j60k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -6)
+target = NodePath("../Player")

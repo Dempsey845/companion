@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://bnv8sb0jefmtj"]
+
+[ext_resource type="Script" uid="uid://dp1xk8qxqq1x0" path="res://Entity/NPC/npc_ai.gd" id="1_tifgv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1sih6"]
+albedo_color = Color(0, 0.46666667, 1, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_tifgv"]
+material = SubResource("StandardMaterial3D_1sih6")
+
+[sub_resource type="BoxMesh" id="BoxMesh_tifgv"]
+size = Vector3(0.5, 0.2, 0.2)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pfc2p"]
+
+[node name="NPC_AI" type="CharacterBody3D" unique_id=1515252757]
+collision_layer = 8
+collision_mask = 15
+script = ExtResource("1_tifgv")
+jump_velocity = 4.0
+
+[node name="TargetUpdateTimer" type="Timer" parent="." unique_id=1949210494]
+wait_time = 0.2
+autostart = true
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1595698999]
+target_desired_distance = 2.0
+
+[node name="ForwardRay" type="RayCast3D" parent="." unique_id=30863353]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+target_position = Vector3(0, 0, -1)
+collision_mask = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1146579188]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_tifgv")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=984336784]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.5)
+mesh = SubResource("BoxMesh_tifgv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1909190711]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_pfc2p")
