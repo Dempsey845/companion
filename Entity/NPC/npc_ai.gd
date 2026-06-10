@@ -1,3 +1,4 @@
+class_name NPC
 extends CharacterBody3D
 
 @export var speed: float = 4.0
@@ -8,6 +9,14 @@ extends CharacterBody3D
 var gravity: float = 9.8
 var next_position: Vector3
 
+var _chase_target: bool
+var chase_target: bool:
+	get:
+		return _chase_target
+	set(value):
+		_chase_target = value
+		_on_chase_target()
+
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var forward_ray: RayCast3D = $ForwardRay
 @onready var target_update_timer: Timer = $TargetUpdateTimer
@@ -17,7 +26,13 @@ func _ready() -> void:
 
 func _physics_process(delta: float):
 	_try_apply_gravity(delta)
+	
+	if chase_target:
+		_handle_chase_target(delta)
+	
+	move_and_slide()
 
+func _handle_chase_target(delta: float):
 	if target == null:
 		move_and_slide()
 		return
@@ -105,6 +120,14 @@ func face_movement_direction(delta: float):
 func jump():
 	if is_on_floor():
 		velocity.y = jump_velocity
+
+func is_target_in_range() -> bool:
+	return true
+
+func _on_chase_target():
+	if target == null:
+		push_warning("NPC: No target to chase!")
+		chase_target = false
 
 func _on_target_update_timer_timeout() -> void:
 	nav_agent.target_position = target.global_position
