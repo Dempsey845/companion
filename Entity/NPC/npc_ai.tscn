@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cy8cw242qaxcb" path="res://StateMachine/state_machine.gd" id="2_fmdth"]
 [ext_resource type="Script" uid="uid://dwn3cfijy7xt" path="res://Entity/NPC/States/npc_idle_state.gd" id="3_cpmln"]
 [ext_resource type="Script" uid="uid://b8kguppsv37p5" path="res://Entity/NPC/States/npc_chase_state.gd" id="4_cpmln"]
+[ext_resource type="Script" uid="uid://corpwramldeuu" path="res://Entity/NPC/States/npc_wander_state.gd" id="5_wfllg"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1sih6"]
 albedo_color = Color(0, 0.46666667, 1, 1)
@@ -24,7 +25,7 @@ jump_velocity = 4.0
 
 [node name="StateMachine" type="Node" parent="." unique_id=2095926968 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("2_fmdth")
-initial_state = NodePath("IdleState")
+initial_state = NodePath("WanderState")
 metadata/_custom_type_script = "uid://cy8cw242qaxcb"
 
 [node name="IdleState" type="Node" parent="StateMachine" unique_id=756588674]
@@ -35,12 +36,20 @@ metadata/_custom_type_script = "uid://b338yemjg6aum"
 script = ExtResource("4_cpmln")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
-[node name="TargetUpdateTimer" type="Timer" parent="." unique_id=1949210494]
+[node name="TargetUpdateTimer" type="Timer" parent="StateMachine/ChaseState" unique_id=1949210494]
 wait_time = 0.2
-autostart = true
+
+[node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093]
+script = ExtResource("5_wfllg")
+metadata/_custom_type_script = "uid://b338yemjg6aum"
+
+[node name="WaitTimer" type="Timer" parent="StateMachine/WanderState" unique_id=2079812908]
+wait_time = 2.0
+one_shot = true
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1595698999]
 target_desired_distance = 2.0
+debug_enabled = true
 
 [node name="ForwardRay" type="RayCast3D" parent="." unique_id=30863353]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)

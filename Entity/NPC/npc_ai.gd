@@ -1,54 +1,48 @@
 class_name NPC
 extends CharacterBody3D
 
+signal navigation_finished
+
 @export var speed: float = 4.0
 @export var acceleration: float = 10.0
 @export var jump_velocity: float = 6.0
-@export var target: Node3D
+
+var _move: bool
+var move: bool:
+	get:
+		return _move
+	set(value):
+		_move = value
 
 var gravity: float = 9.8
 var next_position: Vector3
 
-var _chase_target: bool
-var chase_target: bool:
-	get:
-		return _chase_target
-	set(value):
-		_chase_target = value
-		_on_chase_target()
-
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var forward_ray: RayCast3D = $ForwardRay
-@onready var target_update_timer: Timer = $TargetUpdateTimer
-
-func _ready() -> void:
-	target_update_timer.timeout.connect(_on_target_update_timer_timeout)
 
 func _physics_process(delta: float):
 	_try_apply_gravity(delta)
 	
-	if chase_target:
-		_handle_chase_target(delta)
+	if move:
+		_move_towards_target_position(delta)
+	else:
+		_stop_moving(delta)
 	
 	move_and_slide()
 
-func _handle_chase_target(delta: float):
-	if target == null:
-		move_and_slide()
-		return
-
-	# Stop when destination reached
+func _move_towards_target_position(delta: float):
+	next_position = nav_agent.get_next_path_position()
+	
 	if nav_agent.is_navigation_finished():
-		_stop_moving(delta)
+		navigation_finished.emit()
+		move = false
 		return
-
+	
 	_handle_obstacles()
 
 	_move_to_next_position(delta)
 
 	face_movement_direction(delta)
-
-	move_and_slide()
 
 func _try_apply_gravity(delta: float):
 	if not is_on_floor():
@@ -66,8 +60,6 @@ func _stop_moving(delta: float):
 		0.0,
 		acceleration * delta
 	)
-
-	move_and_slide()
 
 func _handle_obstacles():
 	# Auto jump if obstacle detected
@@ -117,18 +109,12 @@ func face_movement_direction(delta: float):
 			8.0 * delta
 		)
 
+func set_target_position(new_target_position: Vector3):
+	nav_agent.target_position = new_target_position
+
 func jump():
 	if is_on_floor():
 		velocity.y = jump_velocity
 
 func is_target_in_range() -> bool:
 	return true
-
-func _on_chase_target():
-	if target == null:
-		push_warning("NPC: No target to chase!")
-		chase_target = false
-
-func _on_target_update_timer_timeout() -> void:
-	nav_agent.target_position = target.global_position
-	next_position = nav_agent.get_next_path_position()

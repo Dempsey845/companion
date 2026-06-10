@@ -41,7 +41,7 @@ collision_layer = 2
 collision_mask = 15
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="NavigationRegion3D/CSGCombiner3D" unique_id=1931672307]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.160458)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.5604577)
 polygon = PackedVector2Array(-2.1000001, 0.5, 0, 1.2, 3.5, 2.3, 3.5, 0.5)
 depth = 2.17
 
@@ -69,9 +69,9 @@ radius = 1.9
 material = ExtResource("2_go701")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D" unique_id=2133305650]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5019145, 1.4000001, 6.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.701915, 1.4000001, 6.45)
 material_override = ExtResource("3_5a7ea")
-size = Vector3(4.1, 1.8000001, 2.2)
+size = Vector3(6.5, 1.8000001, 2.1000001)
 material = ExtResource("3_5a7ea")
 
 [node name="NavigationLink3D" type="NavigationLink3D" parent="NavigationRegion3D" unique_id=55808691]
@@ -92,6 +92,10 @@ end_position = Vector3(-0.985, -0.09, 0)
 [node name="Player" parent="." unique_id=1685154727 instance=ExtResource("1_a02cp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="NPC_AI" parent="." unique_id=1515252757 node_paths=PackedStringArray("target") instance=ExtResource("4_8j60k")]
+[node name="NPC_AI" parent="." unique_id=1515252757 instance=ExtResource("4_8j60k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -6)
-target = NodePath("../Player")
+
+[node name="ChaseState" parent="NPC_AI/StateMachine" parent_id_path=PackedInt32Array(1515252757, 2095926968) index="1" unique_id=969530027 node_paths=PackedStringArray("target")]
+target = NodePath("../../../Player")
+
+[editable path="NPC_AI"]
