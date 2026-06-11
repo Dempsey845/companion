@@ -25,7 +25,7 @@ jump_velocity = 4.0
 
 [node name="StateMachine" type="Node" parent="." unique_id=2095926968 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("2_fmdth")
-initial_state = NodePath("WanderState")
+initial_state = NodePath("IdleState")
 metadata/_custom_type_script = "uid://cy8cw242qaxcb"
 
 [node name="IdleState" type="Node" parent="StateMachine" unique_id=756588674]

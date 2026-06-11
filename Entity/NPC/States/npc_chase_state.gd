@@ -13,7 +13,6 @@ func enter():
 	if actor is not NPC:
 		push_error("This State is only compatible with NPC's!")
 		
-	actor.move = true
 	target_update_timer.start()
 	
 func exit():
@@ -21,3 +20,4 @@ func exit():
 	
 func _on_target_update_timer_timeout():
 	actor.set_target_position(target.global_position)
+	actor.move = true
