@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bnv8sb0jefmtj"]
 
 [ext_resource type="Script" uid="uid://dp1xk8qxqq1x0" path="res://Entity/NPC/npc_ai.gd" id="1_tifgv"]
+[ext_resource type="Script" uid="uid://dk5ptg0c0fx3t" path="res://Component/health_component.gd" id="2_84n1q"]
 [ext_resource type="Script" uid="uid://cy8cw242qaxcb" path="res://StateMachine/state_machine.gd" id="2_fmdth"]
 [ext_resource type="Script" uid="uid://dwn3cfijy7xt" path="res://Entity/NPC/States/npc_idle_state.gd" id="3_cpmln"]
 [ext_resource type="Script" uid="uid://b8kguppsv37p5" path="res://Entity/NPC/States/npc_chase_state.gd" id="4_cpmln"]
@@ -22,6 +23,10 @@ collision_layer = 8
 collision_mask = 15
 script = ExtResource("1_tifgv")
 jump_velocity = 4.0
+
+[node name="Health" type="Node" parent="." unique_id=1743741218]
+script = ExtResource("2_84n1q")
+metadata/_custom_type_script = "uid://dk5ptg0c0fx3t"
 
 [node name="StateMachine" type="Node" parent="." unique_id=2095926968 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("2_fmdth")

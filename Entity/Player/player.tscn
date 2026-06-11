@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ddp7y8rwb1paa"]
 
 [ext_resource type="Script" uid="uid://crssfr18fd4hu" path="res://Entity/Player/player.gd" id="1_mc1dd"]
+[ext_resource type="Script" uid="uid://dk5ptg0c0fx3t" path="res://Component/health_component.gd" id="2_x1f5c"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xclk5"]
 
@@ -10,6 +11,10 @@
 collision_layer = 4
 collision_mask = 11
 script = ExtResource("1_mc1dd")
+
+[node name="Health" type="Node" parent="." unique_id=459019912]
+script = ExtResource("2_x1f5c")
+metadata/_custom_type_script = "uid://dk5ptg0c0fx3t"
 
 [node name="Head" type="Node3D" parent="." unique_id=1833501205]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.582, 0)
