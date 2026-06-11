@@ -3,9 +3,11 @@
 [ext_resource type="Script" uid="uid://dp1xk8qxqq1x0" path="res://Entity/NPC/npc_ai.gd" id="1_tifgv"]
 [ext_resource type="Script" uid="uid://dk5ptg0c0fx3t" path="res://Component/health_component.gd" id="2_84n1q"]
 [ext_resource type="Script" uid="uid://cy8cw242qaxcb" path="res://StateMachine/state_machine.gd" id="2_fmdth"]
+[ext_resource type="Script" uid="uid://dsf4eco7yji27" path="res://Entity/NPC/npc_air_state.gd" id="3_5vso3"]
 [ext_resource type="Script" uid="uid://dwn3cfijy7xt" path="res://Entity/NPC/States/npc_idle_state.gd" id="3_cpmln"]
 [ext_resource type="Script" uid="uid://b8kguppsv37p5" path="res://Entity/NPC/States/npc_chase_state.gd" id="4_cpmln"]
 [ext_resource type="Script" uid="uid://corpwramldeuu" path="res://Entity/NPC/States/npc_wander_state.gd" id="5_wfllg"]
+[ext_resource type="PackedScene" uid="uid://cerbsxix0ryba" path="res://Entity/NPC/Humanoid/humanoid_skeleton.tscn" id="7_3y805"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1sih6"]
 albedo_color = Color(0, 0.46666667, 1, 1)
@@ -22,11 +24,16 @@ size = Vector3(0.5, 0.2, 0.2)
 collision_layer = 8
 collision_mask = 15
 script = ExtResource("1_tifgv")
-jump_velocity = 4.0
+jump_velocity = 4.5
 
 [node name="Health" type="Node" parent="." unique_id=1743741218]
 script = ExtResource("2_84n1q")
 metadata/_custom_type_script = "uid://dk5ptg0c0fx3t"
+
+[node name="NPCAirState" type="Node" parent="." unique_id=590697671 node_paths=PackedStringArray("character_body")]
+script = ExtResource("3_5vso3")
+character_body = NodePath("..")
+metadata/_custom_type_script = "uid://dsf4eco7yji27"
 
 [node name="StateMachine" type="Node" parent="." unique_id=2095926968 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("2_fmdth")
@@ -64,12 +71,19 @@ collision_mask = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1146579188]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_tifgv")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=984336784]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.5)
+visible = false
 mesh = SubResource("BoxMesh_tifgv")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1909190711]
+[node name="DefaultCollisionShape" type="CollisionShape3D" parent="." unique_id=1909190711]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_pfc2p")
+
+[node name="HumanoidSkeleton" parent="." unique_id=2129837301 node_paths=PackedStringArray("npc", "air_tracker") instance=ExtResource("7_3y805")]
+transform = Transform3D(-0.9659258, 0, -0.25881898, 0, 1, 0, 0.25881898, 0, -0.9659258, 0, 0, 0)
+npc = NodePath("..")
+air_tracker = NodePath("../NPCAirState")

@@ -100,7 +100,7 @@ end_position = Vector3(0, -0.485, -1.63)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="NPC_AI" parent="." unique_id=1515252757 instance=ExtResource("4_8j60k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -6)
 
 [node name="ChaseState" parent="NPC_AI/StateMachine" parent_id_path=PackedInt32Array(1515252757, 2095926968) index="1" unique_id=969530027 node_paths=PackedStringArray("target")]
 target = NodePath("../../../Player")

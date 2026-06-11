@@ -2,6 +2,7 @@ class_name NPC
 extends CharacterBody3D
 
 signal navigation_finished
+signal jump_started
 
 @export var speed: float = 4.0
 @export var acceleration: float = 10.0
@@ -25,7 +26,6 @@ var has_look_target := false
 
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var forward_ray: RayCast3D = $ForwardRay
-
 
 func _physics_process(delta: float):
 	_try_apply_gravity(delta)
@@ -150,6 +150,7 @@ func set_target_position(new_target_position: Vector3):
 func jump():
 	if is_on_floor():
 		velocity.y = jump_velocity
+		jump_started.emit()
 
 func is_target_in_range() -> bool:
 	return true
