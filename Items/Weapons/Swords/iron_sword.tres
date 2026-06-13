@@ -11,6 +11,6 @@ item_title = "Iron Sword"
 item_description = "One Handed Iron Sword"
 world_item_scene = ExtResource("1_v84ko")
 item_type = 1
-item_use_rate = 3.0
+item_use_cooldown_duration = 3.0
 use_item_until_stopped = true
 metadata/_custom_type_script = "uid://hfeuu1jmxtbl"

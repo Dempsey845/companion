@@ -18,6 +18,7 @@ var equipped: bool
 
 func _ready() -> void:
 	item_manager.item_used.connect(_on_item_used)
+	equip.call_deferred()
 
 func equip():
 	if equipped:
@@ -35,20 +36,13 @@ func is_current_item_weapon() -> bool:
 	var item_type = item_manager.current_world_item.item_resource.item_type
 	return item_type == Item.ItemType.Weapon
 
-func start_using_weapon():
+func try_use_current_weapon():
 	if not is_current_item_weapon():
 		print("Current item is not a weapon")
 		return
-		
-	if item_manager.item_use_timer.is_stopped():
-		item_manager.item_use_timer.start()
-
-func stop_using_weapon():
-	if not is_current_item_weapon():
-		return
-		
-	item_manager.item_use_timer.stop()
-
+	
+	item_manager.try_use_current_item()
+	
 func _on_item_used(_item_type: Item.ItemType):
 	if not is_current_item_weapon():
 		return

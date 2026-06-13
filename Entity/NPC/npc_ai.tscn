@@ -56,6 +56,9 @@ metadata/_custom_type_script = "uid://b338yemjg6aum"
 [node name="TargetUpdateTimer" type="Timer" parent="StateMachine/ChaseState" unique_id=1949210494]
 wait_time = 0.2
 
+[node name="DistanceCheckTimer" type="Timer" parent="StateMachine/ChaseState" unique_id=1800656302]
+wait_time = 0.2
+
 [node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093]
 script = ExtResource("5_wfllg")
 wander_type = 1
@@ -75,7 +78,7 @@ script = ExtResource("10_bcm3m")
 skeleton = NodePath("../HumanoidSkeleton")
 start_item = ExtResource("11_vasbk")
 
-[node name="ItemUseTimer" type="Timer" parent="NPCItemManager" unique_id=1081174297]
+[node name="ItemUseCooldownTimer" type="Timer" parent="NPCItemManager" unique_id=1081174297]
 one_shot = true
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1595698999]
