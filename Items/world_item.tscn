@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://t8mdfqcpgsd3"]
+
+[ext_resource type="Script" uid="uid://bgcedooxy6xct" path="res://Items/world_item.gd" id="1_rgkup"]
+
+[node name="WorldItem" type="Node3D" unique_id=1995295482]
+script = ExtResource("1_rgkup")

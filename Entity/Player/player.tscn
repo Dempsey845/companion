@@ -4,8 +4,10 @@
 [ext_resource type="Script" uid="uid://dk5ptg0c0fx3t" path="res://Component/health_component.gd" id="2_x1f5c"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xclk5"]
+height = 2.15
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mc1dd"]
+height = 2.15
 
 [node name="Player" type="CharacterBody3D" unique_id=1685154727]
 collision_layer = 4
@@ -17,15 +19,15 @@ script = ExtResource("2_x1f5c")
 metadata/_custom_type_script = "uid://dk5ptg0c0fx3t"
 
 [node name="Head" type="Node3D" parent="." unique_id=1833501205]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.582, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.882, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=42900310]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.374)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=473420840]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 mesh = SubResource("CapsuleMesh_xclk5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1737531599]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("CapsuleShape3D_mc1dd")

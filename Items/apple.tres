@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Item" format=3 uid="uid://damwcchj3agjq"]
+
+[ext_resource type="Script" uid="uid://bf1dg4nkwnkwx" path="res://Items/item.gd" id="1_pepse"]
+
+[resource]
+script = ExtResource("1_pepse")
+item_id = "apple"
+item_title = "Apple"
+item_description = "A yummy apple"
+remove_item_on_use = true
+metadata/_custom_type_script = "uid://bf1dg4nkwnkwx"
