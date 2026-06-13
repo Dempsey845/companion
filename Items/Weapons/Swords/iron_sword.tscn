@@ -1,6 +1,8 @@
 [gd_scene format=4 uid="uid://7mh745hhb23"]
 
-[ext_resource type="PackedScene" uid="uid://bxdn1fdox0tpj" path="res://Items/Weapons/Sword/Sword.fbx" id="1_s7qk2"]
+[ext_resource type="PackedScene" uid="uid://bxdn1fdox0tpj" path="res://Items/Weapons/Swords/Sword.fbx" id="1_jhb00"]
+[ext_resource type="Script" uid="uid://qu0k32xa4aay" path="res://Items/Weapons/weapon_world_item.gd" id="2_lufao"]
+[ext_resource type="Script" uid="uid://6poejc1p8mo3" path="res://Component/hitbox_component.gd" id="2_yj1fr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3jge"]
 resource_name = "Material"
@@ -78,7 +80,27 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_gkp0s")
 
-[node name="SwordMesh" unique_id=623703386 instance=ExtResource("1_s7qk2")]
+[sub_resource type="SphereShape3D" id="SphereShape3D_lufao"]
+radius = 0.2
 
-[node name="Cube" parent="." index="0" unique_id=217692461]
+[node name="IronSword" unique_id=246534089 node_paths=PackedStringArray("hitbox") instance=ExtResource("1_jhb00")]
+script = ExtResource("2_lufao")
+hitbox = NodePath("Hitbox")
+delay_before_can_damage = 0.7
+hitbox_active_duration = 0.4
+
+[node name="Cube" parent="." index="0" unique_id=1138675458]
 mesh = SubResource("ArrayMesh_rqbum")
+
+[node name="Hitbox" type="Area3D" parent="." index="1" unique_id=886509751]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+script = ExtResource("2_yj1fr")
+damage = 1
+active = false
+metadata/_custom_type_script = "uid://6poejc1p8mo3"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" index="0" unique_id=607362022]
+shape = SubResource("SphereShape3D_lufao")

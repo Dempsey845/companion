@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Weapon" format=3 uid="uid://c74dvywyw7wyj"]
+
+[ext_resource type="PackedScene" uid="uid://7mh745hhb23" path="res://Items/Weapons/Swords/iron_sword.tscn" id="1_v84ko"]
+[ext_resource type="Script" uid="uid://hfeuu1jmxtbl" path="res://Items/Weapons/weapon.gd" id="2_rryx4"]
+
+[resource]
+script = ExtResource("2_rryx4")
+damage = 1
+item_id = "iron_sword"
+item_title = "Iron Sword"
+item_description = "One Handed Iron Sword"
+world_item_scene = ExtResource("1_v84ko")
+item_type = 1
+item_use_rate = 3.0
+use_item_until_stopped = true
+metadata/_custom_type_script = "uid://hfeuu1jmxtbl"

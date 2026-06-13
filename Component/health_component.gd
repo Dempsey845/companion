@@ -8,7 +8,7 @@ signal death
 
 @export var max_health: int = 5
 
-var _current_health
+var _current_health: int
 var current_heatlh: int:
 	get:
 		return _current_health

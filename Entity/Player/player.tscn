@@ -2,12 +2,16 @@
 
 [ext_resource type="Script" uid="uid://crssfr18fd4hu" path="res://Entity/Player/player.gd" id="1_mc1dd"]
 [ext_resource type="Script" uid="uid://dk5ptg0c0fx3t" path="res://Component/health_component.gd" id="2_x1f5c"]
+[ext_resource type="Script" uid="uid://d106g5h1grs1w" path="res://Component/hurtbox_component.gd" id="3_qb0yx"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xclk5"]
 height = 2.15
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mc1dd"]
 height = 2.15
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_viyt1"]
+height = 2.2
 
 [node name="Player" type="CharacterBody3D" unique_id=1685154727]
 collision_layer = 4
@@ -31,3 +35,16 @@ mesh = SubResource("CapsuleMesh_xclk5")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1737531599]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("CapsuleShape3D_mc1dd")
+
+[node name="Hurtbox" type="Area3D" parent="." unique_id=1233200131 node_paths=PackedStringArray("health_component")]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_qb0yx")
+health_component = NodePath("../Health")
+metadata/_custom_type_script = "uid://d106g5h1grs1w"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox" unique_id=1447685595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("CapsuleShape3D_viyt1")
+debug_color = Color(0.94022775, 0.13313243, 0.51803446, 0.41960785)

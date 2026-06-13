@@ -8,8 +8,6 @@ signal item_used(item_type: Item.ItemType)
 
 var item_slot: Node3D
 
-var world_item_scene: PackedScene = preload("uid://t8mdfqcpgsd3")
-
 var current_world_item: WorldItem
 
 @onready var item_use_timer: Timer = $ItemUseTimer
@@ -29,18 +27,15 @@ func remove_current_item():
 func equip_new_item(item_resource: Item):
 	remove_current_item()
 		
-	current_world_item = world_item_scene.instantiate() as WorldItem
+	current_world_item = item_resource.world_item_scene.instantiate() as WorldItem
 	current_world_item.init(item_resource)
-	
-	var item_visuals: Node3D = item_resource.item_visuals_scene.instantiate()
-	current_world_item.add_child(item_visuals)
 	
 	item_slot.add_child(current_world_item)
 	
 	item_use_timer.wait_time = item_resource.item_use_rate
 
 func _item_use_timer_timeout():
+	current_world_item.use_item()
 	item_used.emit(current_world_item.item_resource.item_type)
-	print("Item used!")
 	if current_world_item.item_resource.use_item_until_stopped:
 		item_use_timer.start()

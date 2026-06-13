@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cerbsxix0ryba" path="res://Entity/NPC/Humanoid/humanoid_skeleton.tscn" id="7_3y805"]
 [ext_resource type="Script" uid="uid://n16pks25wcsu" path="res://Entity/NPC/npc_weapon_manager.gd" id="9_tayem"]
 [ext_resource type="Script" uid="uid://4bmub7i6ig7h" path="res://Entity/NPC/npc_item_manager.gd" id="10_bcm3m"]
-[ext_resource type="Resource" uid="uid://c74dvywyw7wyj" path="res://Items/Weapons/Sword/sword.tres" id="11_vasbk"]
+[ext_resource type="Resource" uid="uid://c74dvywyw7wyj" path="res://Items/Weapons/Swords/iron_sword.tres" id="11_vasbk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1sih6"]
 albedo_color = Color(0, 0.46666667, 1, 1)
