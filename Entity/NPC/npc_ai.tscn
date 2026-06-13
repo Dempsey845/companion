@@ -48,9 +48,10 @@ metadata/_custom_type_script = "uid://cy8cw242qaxcb"
 script = ExtResource("3_cpmln")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
-[node name="ChaseState" type="Node" parent="StateMachine" unique_id=969530027 node_paths=PackedStringArray("weapon_manager")]
+[node name="ChaseState" type="Node" parent="StateMachine" unique_id=969530027 node_paths=PackedStringArray("weapon_manager", "skeleton")]
 script = ExtResource("4_cpmln")
 weapon_manager = NodePath("../../NPCWeaponManager")
+skeleton = NodePath("../../HumanoidSkeleton")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
 [node name="TargetUpdateTimer" type="Timer" parent="StateMachine/ChaseState" unique_id=1949210494]
