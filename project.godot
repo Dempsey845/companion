@@ -15,6 +15,10 @@ run/main_scene="uid://dena2tp786tpj"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[global_group]
+
+points_of_interest=""
+
 [input]
 
 move_forward={

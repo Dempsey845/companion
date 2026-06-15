@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://n16pks25wcsu" path="res://Entity/NPC/npc_weapon_manager.gd" id="9_tayem"]
 [ext_resource type="Script" uid="uid://4bmub7i6ig7h" path="res://Entity/NPC/npc_item_manager.gd" id="10_bcm3m"]
 [ext_resource type="Resource" uid="uid://c74dvywyw7wyj" path="res://Items/Weapons/Swords/iron_sword.tres" id="11_vasbk"]
+[ext_resource type="Script" uid="uid://blk50mmexxv2" path="res://Entity/NPC/npc_target_search_area.gd" id="12_vasbk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1sih6"]
 albedo_color = Color(0, 0.46666667, 1, 1)
@@ -23,6 +24,9 @@ size = Vector3(0.5, 0.2, 0.2)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pfc2p"]
 radius = 0.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ppcqs"]
+radius = 5.0
 
 [node name="NPC_AI" type="CharacterBody3D" unique_id=1515252757]
 collision_layer = 8
@@ -41,17 +45,18 @@ metadata/_custom_type_script = "uid://dsf4eco7yji27"
 
 [node name="StateMachine" type="Node" parent="." unique_id=2095926968 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("2_fmdth")
-initial_state = NodePath("ChaseState")
+initial_state = NodePath("WanderState")
 metadata/_custom_type_script = "uid://cy8cw242qaxcb"
 
 [node name="IdleState" type="Node" parent="StateMachine" unique_id=756588674]
 script = ExtResource("3_cpmln")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
-[node name="ChaseState" type="Node" parent="StateMachine" unique_id=969530027 node_paths=PackedStringArray("weapon_manager", "skeleton")]
+[node name="ChaseState" type="Node" parent="StateMachine" unique_id=969530027 node_paths=PackedStringArray("weapon_manager", "skeleton", "target_search_area")]
 script = ExtResource("4_cpmln")
 weapon_manager = NodePath("../../NPCWeaponManager")
 skeleton = NodePath("../../HumanoidSkeleton")
+target_search_area = NodePath("../../TargetSearchArea")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
 [node name="TargetUpdateTimer" type="Timer" parent="StateMachine/ChaseState" unique_id=1949210494]
@@ -60,14 +65,17 @@ wait_time = 0.2
 [node name="DistanceCheckTimer" type="Timer" parent="StateMachine/ChaseState" unique_id=1800656302]
 wait_time = 0.2
 
-[node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093]
+[node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093 node_paths=PackedStringArray("target_search_area")]
 script = ExtResource("5_wfllg")
 wander_type = 1
+target_search_area = NodePath("../../TargetSearchArea")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
 [node name="WaitTimer" type="Timer" parent="StateMachine/WanderState" unique_id=2079812908]
 wait_time = 2.0
 one_shot = true
+
+[node name="TargetSearchTimer" type="Timer" parent="StateMachine/WanderState" unique_id=391780086]
 
 [node name="NPCWeaponManager" type="Node" parent="." unique_id=1915033598 node_paths=PackedStringArray("item_manager", "humanoid_skeleton")]
 script = ExtResource("9_tayem")
@@ -83,7 +91,6 @@ start_item = ExtResource("11_vasbk")
 one_shot = true
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1595698999]
-target_desired_distance = 2.0
 debug_enabled = true
 
 [node name="ForwardRay" type="RayCast3D" parent="." unique_id=30863353]
@@ -109,3 +116,12 @@ shape = SubResource("CapsuleShape3D_pfc2p")
 transform = Transform3D(-0.9659258, 0, -0.25881898, 0, 1, 0, 0.25881898, 0, -0.9659258, 0, 0, 0)
 npc = NodePath("..")
 air_tracker = NodePath("../NPCAirState")
+
+[node name="TargetSearchArea" type="Area3D" parent="." unique_id=1651124830]
+collision_layer = 0
+collision_mask = 12
+monitorable = false
+script = ExtResource("12_vasbk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TargetSearchArea" unique_id=1584643819]
+shape = SubResource("SphereShape3D_ppcqs")
