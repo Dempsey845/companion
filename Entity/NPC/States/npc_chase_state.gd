@@ -34,7 +34,6 @@ func update(delta: float):
 	if distance_to_target > combat_data.attack_distance:
 		# Move closer
 		ideal_time = 0.0
-		actor.set_target_position(target_manager.target.global_position)
 		actor.move = true
 	elif distance_to_target < combat_data.min_attack_seperation_distance:
 		# Move backwards
@@ -52,4 +51,4 @@ func update(delta: float):
 			state_machine.change_state(attack_state)
 	
 func _on_target_update_timer_timeout():
-	pass
+	actor.set_target_position(target_manager.target.global_position)

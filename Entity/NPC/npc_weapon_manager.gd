@@ -64,4 +64,4 @@ func _attack():
 func _on_current_weapon_hit_hurtbox(hurtbox: Hurtbox):
 	if hurtbox.get_parent() is NPC:
 		var npc: NPC = hurtbox.get_parent()
-		npc.apply_knockback(get_parent().global_position, 8.0)
+		npc.apply_knockback(get_parent().global_position, 4.0)

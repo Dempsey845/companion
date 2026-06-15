@@ -15,12 +15,28 @@ enum TargetType
 
 @export var npc_state_machine: StateMachine
 @export var npc_idle_state: State 
+@export var npc_wait_to_attack_state: State
 
 var combat_agent_scene: PackedScene = preload("uid://t6l7i71p7q7v")
 var defender_agent_scene: PackedScene = preload("uid://doly0bktw68sy")
 
 var is_weapon_sheathed: bool = true
-var target: Node3D
+
+var _target: Node3D
+var target: Node3D:
+	get():
+		return _target
+	set(value):
+		var last_target = _target
+		_target = value
+		if value and value.has_node("Health"):
+			if is_instance_valid(last_target) and last_target.has_node("Health"):
+				last_target.get_node("Health").death.disconnect(_on_target_death)
+
+			var health = value.get_node("Health")
+
+			if not health.death.is_connected(_on_target_death):
+				health.death.connect(_on_target_death)
 
 var in_combat : bool = false
 
@@ -42,8 +58,9 @@ func try_find_closest_target() -> bool:
 	return false
 
 func try_start_combat_with_target(npc_target: NPC) -> bool:
+	target = npc_target
+
 	if NPCManager.instance.try_register_npc_combat_pair(npc, npc_target):
-		target = npc_target
 		npc_target.target_manager.start_combat()
 		npc_target.target_manager.target = npc
 
@@ -56,6 +73,8 @@ func try_start_combat_with_target(npc_target: NPC) -> bool:
 		start_combat()
 
 		return true
+
+	npc.state_machine.change_state(npc_wait_to_attack_state)
 
 	return false
 
@@ -112,3 +131,6 @@ func _sheath_weapon():
 	await get_tree().create_timer(0.5).timeout
 	weapon_manager.item_manager.requip_current_item(NPCItemManager.ItemSlot.Back)
 	is_weapon_sheathed = true
+
+func _on_target_death():
+	_clear_target()

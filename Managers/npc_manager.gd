@@ -30,6 +30,9 @@ func try_register_npc_combat_pair(attacker_npc: NPC, defender_npc: NPC) -> bool:
 
 	return true
 
+func get_npcs_combat_pair(npc: NPC) -> NPC:
+	return npc_combat_pairs.get(npc)
+
 func remove_combat_agents_from_npc(npc: NPC):
 	if npc.has_node("NPCCombatAgent"):
 		npc.get_node("NPCCombatAgent").queue_free()
