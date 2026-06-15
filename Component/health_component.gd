@@ -20,6 +20,9 @@ var current_heatlh: int:
 		if value <= 0:
 			death.emit()
 
+func _ready() -> void:
+	current_heatlh = max_health
+
 func take_damage(damage_amount: int):
 	current_heatlh -= damage_amount
 	damage_taken.emit(damage_amount)

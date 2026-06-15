@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://doly0bktw68sy"]
+
+[ext_resource type="Script" uid="uid://ctppvb8vk6rw1" path="res://Entity/NPC/npc_defender_agent.gd" id="1_eesjy"]
+
+[node name="NPCDefenderAgent" type="Node" unique_id=8886632]
+script = ExtResource("1_eesjy")

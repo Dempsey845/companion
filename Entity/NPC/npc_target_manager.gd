@@ -1,6 +1,8 @@
 class_name NPCTargetManager
 extends Node
 
+signal target_died
+
 enum TargetType
 {
 	NPC,
@@ -13,20 +15,39 @@ enum TargetType
 @export var skeleton: HumanoidSkeleton 
 @export var weapon_manager: NPCWeaponManager
 
+@export var npc_state_machine: StateMachine
+@export var npc_idle_state: State 
+
+var combat_agent_scene: PackedScene = preload("uid://t6l7i71p7q7v")
+var defender_agent_scene: PackedScene = preload("uid://doly0bktw68sy")
+
 var is_weapon_sheathed: bool = true
 var target: Node3D
 
 func try_find_closest_target() -> bool:
+	if target:
+		return true
+
 	target = target_search_area.find_closest_target()
 	
 	if target != null:
 		withdraw_weapon()
 
+		if target.has_node("Health"):
+			var target_health: Health = target.get_node("Health")
+			target_health.death.connect(_on_target_died)
+
 		var target_type := get_current_target_type()
 		if target_type == TargetType.NPC:
 			# Create a npc combat agent
-			if not target.has_node("NPCCombatAgent"):
-				pass
+			if target.has_node("NPCCombatAgent") or target.has_node("NPCDefenderAgent") or get_parent().has_node("NPCDefenderAgent"):
+				return false
+
+			var combat_agent := combat_agent_scene.instantiate() as NPCCombatAgent
+			combat_agent.target_manager = self
+
+			get_parent().add_child(combat_agent, true)
+			target.add_child(defender_agent_scene.instantiate(), true)
 	else:
 		sheath_weapon()
 	
@@ -69,3 +90,7 @@ func sheath_weapon():
 
 func can_attack() -> bool:
 	return not is_weapon_sheathed
+
+func _on_target_died():
+	npc_state_machine.change_state(npc_idle_state)
+	target_died.emit()

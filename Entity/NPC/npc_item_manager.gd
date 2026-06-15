@@ -47,8 +47,11 @@ func equip_new_item(item_resource: Item, item_slot_type: ItemSlot):
 	
 	item_use_cooldown_timer.wait_time = item_resource.item_use_cooldown_duration
 
-func try_use_current_item():
+func try_use_current_item() -> bool:
 	if item_use_cooldown_timer.is_stopped():
 		current_world_item.use_item()
 		item_used.emit(current_world_item.item_resource.item_type)
 		item_use_cooldown_timer.start()
+		return true
+
+	return false

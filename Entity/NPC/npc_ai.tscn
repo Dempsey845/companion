@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dp1xk8qxqq1x0" path="res://Entity/NPC/npc_ai.gd" id="1_tifgv"]
 [ext_resource type="Script" uid="uid://dk5ptg0c0fx3t" path="res://Component/health_component.gd" id="2_84n1q"]
+[ext_resource type="Script" uid="uid://duo72s6qqqjtl" path="res://Entity/NPC/npc_health_manager.gd" id="2_dfvyj"]
 [ext_resource type="Script" uid="uid://cy8cw242qaxcb" path="res://StateMachine/state_machine.gd" id="2_fmdth"]
 [ext_resource type="Script" uid="uid://dsf4eco7yji27" path="res://Entity/NPC/npc_air_state.gd" id="3_5vso3"]
 [ext_resource type="Script" uid="uid://dwn3cfijy7xt" path="res://Entity/NPC/States/npc_idle_state.gd" id="3_cpmln"]
@@ -11,11 +12,12 @@
 [ext_resource type="Script" uid="uid://corpwramldeuu" path="res://Entity/NPC/States/npc_wander_state.gd" id="5_wfllg"]
 [ext_resource type="PackedScene" uid="uid://cerbsxix0ryba" path="res://Entity/NPC/Humanoid/humanoid_skeleton.tscn" id="7_3y805"]
 [ext_resource type="Script" uid="uid://d0vif2jefuxn8" path="res://Entity/NPC/States/npc_attack_state.gd" id="8_n2son"]
-[ext_resource type="Script" uid="uid://b338yemjg6aum" path="res://StateMachine/state.gd" id="9_lxnc2"]
 [ext_resource type="Script" uid="uid://n16pks25wcsu" path="res://Entity/NPC/npc_weapon_manager.gd" id="9_tayem"]
 [ext_resource type="Script" uid="uid://4bmub7i6ig7h" path="res://Entity/NPC/npc_item_manager.gd" id="10_bcm3m"]
+[ext_resource type="Script" uid="uid://dprwcbls85uia" path="res://Entity/NPC/States/retreat_state.gd" id="10_lxnc2"]
 [ext_resource type="Resource" uid="uid://c74dvywyw7wyj" path="res://Items/Weapons/Swords/iron_sword.tres" id="11_vasbk"]
 [ext_resource type="Script" uid="uid://blk50mmexxv2" path="res://Entity/NPC/npc_target_search_area.gd" id="12_vasbk"]
+[ext_resource type="Script" uid="uid://d106g5h1grs1w" path="res://Component/hurtbox_component.gd" id="18_5jw1p"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1sih6"]
 albedo_color = Color(0, 0.46666667, 1, 1)
@@ -32,14 +34,22 @@ radius = 0.3
 [sub_resource type="SphereShape3D" id="SphereShape3D_ppcqs"]
 radius = 5.0
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2pdvb"]
+radius = 0.3
+
 [node name="NPC_AI" type="CharacterBody3D" unique_id=1515252757]
 collision_layer = 8
 collision_mask = 15
 script = ExtResource("1_tifgv")
 jump_velocity = 4.5
 
+[node name="NPCHealthManager" type="Node" parent="." unique_id=124943862 node_paths=PackedStringArray("health")]
+script = ExtResource("2_dfvyj")
+health = NodePath("../Health")
+
 [node name="Health" type="Node" parent="." unique_id=1743741218]
 script = ExtResource("2_84n1q")
+max_health = 10
 metadata/_custom_type_script = "uid://dk5ptg0c0fx3t"
 
 [node name="NPCAirState" type="Node" parent="." unique_id=590697671 node_paths=PackedStringArray("character_body")]
@@ -47,12 +57,14 @@ script = ExtResource("3_5vso3")
 character_body = NodePath("..")
 metadata/_custom_type_script = "uid://dsf4eco7yji27"
 
-[node name="NPCTargetManager" type="Node" parent="." unique_id=1355157439 node_paths=PackedStringArray("npc", "target_search_area", "skeleton", "weapon_manager")]
+[node name="NPCTargetManager" type="Node" parent="." unique_id=1355157439 node_paths=PackedStringArray("npc", "target_search_area", "skeleton", "weapon_manager", "npc_state_machine", "npc_idle_state")]
 script = ExtResource("4_ppcqs")
 npc = NodePath("..")
 target_search_area = NodePath("../TargetSearchArea")
 skeleton = NodePath("../HumanoidSkeleton")
 weapon_manager = NodePath("../NPCWeaponManager")
+npc_state_machine = NodePath("../StateMachine")
+npc_idle_state = NodePath("../StateMachine/IdleState")
 
 [node name="NPCCombatData" type="Node" parent="." unique_id=28659779]
 script = ExtResource("5_lxnc2")
@@ -77,15 +89,18 @@ metadata/_custom_type_script = "uid://b338yemjg6aum"
 [node name="TargetUpdateTimer" type="Timer" parent="StateMachine/ChaseState" unique_id=1949210494]
 wait_time = 0.2
 
-[node name="AttackState" type="Node" parent="StateMachine" unique_id=781097642 node_paths=PackedStringArray("combat_data", "weapon_manager", "target_manager")]
+[node name="AttackState" type="Node" parent="StateMachine" unique_id=781097642 node_paths=PackedStringArray("weapon_manager", "target_manager", "combat_data", "chase_state")]
 script = ExtResource("8_n2son")
-combat_data = NodePath("../../NPCCombatData")
 weapon_manager = NodePath("../../NPCWeaponManager")
 target_manager = NodePath("../../NPCTargetManager")
+combat_data = NodePath("../../NPCCombatData")
+chase_state = NodePath("../ChaseState")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
-[node name="RetreatState" type="Node" parent="StateMachine" unique_id=52753964]
-script = ExtResource("9_lxnc2")
+[node name="RetreatState" type="Node" parent="StateMachine" unique_id=52753964 node_paths=PackedStringArray("target_manager", "chase_state")]
+script = ExtResource("10_lxnc2")
+target_manager = NodePath("../../NPCTargetManager")
+chase_state = NodePath("../ChaseState")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
 [node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093 node_paths=PackedStringArray("target_search_area", "target_manager")]
@@ -149,3 +164,20 @@ script = ExtResource("12_vasbk")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TargetSearchArea" unique_id=1584643819]
 shape = SubResource("SphereShape3D_ppcqs")
+
+[node name="Hurtbox" type="Area3D" parent="." unique_id=2093081945 node_paths=PackedStringArray("health_component")]
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+script = ExtResource("18_5jw1p")
+health_component = NodePath("../Health")
+metadata/_custom_type_script = "uid://d106g5h1grs1w"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox" unique_id=302951954]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_2pdvb")
+debug_color = Color(0.8924529, 0.21634963, 0.6037963, 0.41960785)
+
+[node name="CombatStatusLabel" type="Label3D" parent="." unique_id=1864761822]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 2.4, 0)
+text = "Beserker"

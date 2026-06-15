@@ -22,6 +22,8 @@ var current_poi: PointOfInterest
 
 func _ready() -> void:
 	wait_timer.timeout.connect(_on_wait_timer_timeout)
+	
+	target_search_timer.wait_time = randf_range(0.5, 1.5)
 	target_search_timer.timeout.connect(_on_target_search_timer_timeout)
 	
 	if points_of_interest == null:
