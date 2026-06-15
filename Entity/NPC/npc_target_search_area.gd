@@ -12,6 +12,7 @@ enum TargetFilter
 
 func find_closest_target() -> Node3D:
 	var overlapping_bodies := get_overlapping_bodies()
+	overlapping_bodies.shuffle()
 	
 	overlapping_bodies = overlapping_bodies.filter(func(body): return body != get_parent())
 	

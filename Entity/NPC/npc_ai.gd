@@ -3,6 +3,7 @@ extends CharacterBody3D
 
 signal navigation_finished
 signal jump_started
+signal death(npc: NPC)
 
 @export var speed: float = 4.0
 @export var acceleration: float = 10.0
@@ -26,6 +27,12 @@ var has_look_target := false
 
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var forward_ray: RayCast3D = $ForwardRay
+@onready var health: Health = $Health
+@onready var state_machine: StateMachine = $StateMachine
+@onready var target_manager: NPCTargetManager = $NPCTargetManager
+
+func _ready() -> void:
+	health.death.connect(func(): death.emit(self))
 
 func _physics_process(delta: float):
 	_try_apply_gravity(delta)

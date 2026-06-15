@@ -1,10 +1,6 @@
 class_name NPCTargetManager
 extends Node
 
-signal target_died
-signal started_combat(started_by: NPC, agaisnt: NPC)
-signal combat_ended(ended_by: NPC)
-
 enum TargetType
 {
 	NPC,
@@ -26,54 +22,80 @@ var defender_agent_scene: PackedScene = preload("uid://doly0bktw68sy")
 var is_weapon_sheathed: bool = true
 var target: Node3D
 
-# TODO: Optimize this function
-func is_npc_in_combat(target_npc: NPC):
-	return target_npc.has_node("NPCCombatAgent") or target_npc.has_node("NPCDefenderAgent")
+var in_combat : bool = false
+
+func _ready() -> void:
+	NPCManager.instance.combat_ended.connect(_on_combat_ended)
 
 func try_find_closest_target() -> bool:
-	if target:
+	var closest_target = target_search_area.find_closest_target()
+
+	# Only targetting NPCs for now
+	if closest_target == null or \
+		closest_target == target or \
+		get_target_type(closest_target) != TargetType.NPC:
+		return false
+
+	if target == null:
+		return try_start_combat_with_target(closest_target)
+
+	return false
+
+func try_start_combat_with_target(npc_target: NPC) -> bool:
+	if NPCManager.instance.try_register_npc_combat_pair(npc, npc_target):
+		target = npc_target
+		npc_target.target_manager.start_combat()
+		npc_target.target_manager.target = npc
+
+		var combat_agent := combat_agent_scene.instantiate() as NPCCombatAgent
+		combat_agent.target_manager = self
+
+		npc.add_child(combat_agent, true)
+		npc_target.add_child(defender_agent_scene.instantiate(), true)
+
+		start_combat()
+
 		return true
 
-	target = target_search_area.find_closest_target()
-	
-	if target != null:
-		withdraw_weapon()
+	return false
 
-		if target.has_node("Health"):
-			var target_health: Health = target.get_node("Health")
-			target_health.death.connect(_on_target_died)
 
-		var target_type := get_current_target_type()
-		if target_type == TargetType.NPC:
-			# Check to see if the target or this npc is already in combat
-			if is_npc_in_combat(target) or is_npc_in_combat(get_parent()):
-				return false
+func start_combat():
+	print("Combat started")
+	in_combat = true
+	_withdraw_weapon()
 
-			var combat_agent := combat_agent_scene.instantiate() as NPCCombatAgent
-			combat_agent.target_manager = self
-
-			get_parent().add_child(combat_agent, true)
-			target.add_child(defender_agent_scene.instantiate(), true)
-
-			started_combat.emit(get_parent(), target)
-	else:
-		sheath_weapon()
-	
-	return target != null
-
-func clear_target():
-	target = null
-	npc.clear_look_target()
 
 func get_current_target_type() -> TargetType:
-	if target is NPC:
+	return get_target_type(target)
+
+func get_target_type(target_node: Node3D) -> TargetType:
+	if target_node is NPC:
 		return TargetType.NPC
-	elif target is Player:
+	elif target_node is Player:
 		return TargetType.Player
 		
 	return TargetType.Other
 
-func withdraw_weapon():
+func can_attack() -> bool:
+	return not is_weapon_sheathed
+
+func _clear_target():
+	_sheath_weapon()
+	target = null
+	npc.clear_look_target()
+	in_combat = false
+
+func _on_combat_ended(combat_npc: NPC):
+	if combat_npc == npc or \
+	(get_current_target_type() == TargetType.NPC and combat_npc == target):
+		_clear_target()
+
+func _process(_delta: float) -> void:
+	if target:
+		npc.look_at_point(target.global_position)
+
+func _withdraw_weapon():
 	if not is_weapon_sheathed:
 		return
 
@@ -82,12 +104,7 @@ func withdraw_weapon():
 	weapon_manager.item_manager.requip_current_item(NPCItemManager.ItemSlot.RightHand)
 	is_weapon_sheathed = false
 	
-
-func _process(_delta: float) -> void:
-	if target:
-		npc.look_at_point(target.global_position)
-	
-func sheath_weapon():
+func _sheath_weapon():
 	if is_weapon_sheathed:
 		return
 
@@ -95,11 +112,3 @@ func sheath_weapon():
 	await get_tree().create_timer(0.5).timeout
 	weapon_manager.item_manager.requip_current_item(NPCItemManager.ItemSlot.Back)
 	is_weapon_sheathed = true
-
-func can_attack() -> bool:
-	return not is_weapon_sheathed
-
-func _on_target_died():
-	npc_state_machine.change_state(npc_idle_state)
-	combat_ended.emit(get_parent())
-	target_died.emit()
