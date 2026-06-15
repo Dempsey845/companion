@@ -22,26 +22,24 @@ var defender_agent_scene: PackedScene = preload("uid://doly0bktw68sy")
 
 var is_weapon_sheathed: bool = true
 
-var _target: Node3D
-var target: Node3D:
-	get():
-		return _target
-	set(value):
-		var last_target = _target
-		_target = value
-		if value and value.has_node("Health"):
-			if is_instance_valid(last_target) and last_target.has_node("Health"):
-				last_target.get_node("Health").death.disconnect(_on_target_death)
-
-			var health = value.get_node("Health")
-
-			if not health.death.is_connected(_on_target_death):
-				health.death.connect(_on_target_death)
+var target: Node3D
 
 var in_combat : bool = false
 
+var non_target_time: float
+
 func _ready() -> void:
 	NPCManager.instance.combat_ended.connect(_on_combat_ended)
+
+func _process(delta: float) -> void:
+	if target:
+		npc.look_at_point(target.global_position)
+		non_target_time = 0.0
+	else:
+		non_target_time += delta
+
+		if non_target_time > 2.0 and not is_weapon_sheathed:
+			_sheath_weapon()
 
 func try_find_closest_target() -> bool:
 	var closest_target = target_search_area.find_closest_target()
@@ -57,8 +55,19 @@ func try_find_closest_target() -> bool:
 
 	return false
 
+func set_new_target(new_target: Node3D):
+	if is_instance_valid(target) and target.has_node("Health"):
+		target.get_node("Health").death.disconnect(_on_target_death)
+
+	target = new_target
+
+	var health = target.get_node("Health")
+
+	if not health.death.is_connected(_on_target_death):
+		health.death.connect(_on_target_death)
+
 func try_start_combat_with_target(npc_target: NPC) -> bool:
-	target = npc_target
+	set_new_target(npc_target)	
 
 	if NPCManager.instance.try_register_npc_combat_pair(npc, npc_target):
 		npc_target.target_manager.start_combat()
@@ -78,12 +87,10 @@ func try_start_combat_with_target(npc_target: NPC) -> bool:
 
 	return false
 
-
 func start_combat():
 	print("Combat started")
 	in_combat = true
 	_withdraw_weapon()
-
 
 func get_current_target_type() -> TargetType:
 	return get_target_type(target)
@@ -100,7 +107,6 @@ func can_attack() -> bool:
 	return not is_weapon_sheathed
 
 func _clear_target():
-	_sheath_weapon()
 	target = null
 	npc.clear_look_target()
 	in_combat = false
@@ -110,27 +116,23 @@ func _on_combat_ended(combat_npc: NPC):
 	(get_current_target_type() == TargetType.NPC and combat_npc == target):
 		_clear_target()
 
-func _process(_delta: float) -> void:
-	if target:
-		npc.look_at_point(target.global_position)
-
 func _withdraw_weapon():
 	if not is_weapon_sheathed:
 		return
 
+	is_weapon_sheathed = false
 	skeleton.play_upper_body_animation("Sheath", 1.2)
 	await get_tree().create_timer(0.5).timeout
 	weapon_manager.item_manager.requip_current_item(NPCItemManager.ItemSlot.RightHand)
-	is_weapon_sheathed = false
 	
 func _sheath_weapon():
 	if is_weapon_sheathed:
 		return
 
+	is_weapon_sheathed = true
 	skeleton.play_upper_body_animation("Sheath", 1.2)
 	await get_tree().create_timer(0.5).timeout
 	weapon_manager.item_manager.requip_current_item(NPCItemManager.ItemSlot.Back)
-	is_weapon_sheathed = true
 
 func _on_target_death():
-	_clear_target()
+	pass

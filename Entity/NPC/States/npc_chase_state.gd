@@ -51,4 +51,5 @@ func update(delta: float):
 			state_machine.change_state(attack_state)
 	
 func _on_target_update_timer_timeout():
-	actor.set_target_position(target_manager.target.global_position)
+	if target_manager.target:
+		actor.set_target_position(target_manager.target.global_position)

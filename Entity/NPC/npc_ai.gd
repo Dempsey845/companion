@@ -34,6 +34,12 @@ var has_look_target := false
 func _ready() -> void:
 	health.death.connect(func(): death.emit(self))
 
+func _process(delta: float) -> void:
+	if has_look_target:
+		face_target_position(delta)
+	else:
+		face_movement_direction(delta)
+
 func _physics_process(delta: float):
 	_try_apply_gravity(delta)
 	
@@ -41,11 +47,6 @@ func _physics_process(delta: float):
 		_move_towards_target_position(delta)
 	else:
 		_stop_moving(delta)
-	
-	if has_look_target:
-		face_target_position(delta)
-	else:
-		face_movement_direction(delta)
 	
 	move_and_slide()
 
@@ -118,7 +119,7 @@ func face_target_position(delta: float):
 	var direction = look_target_position - global_position
 	direction.y = 0
 
-	if direction.length_squared() < 0.01:
+	if direction.length_squared() < 0.1:
 		return
 
 	var target_rotation = atan2(
@@ -126,10 +127,10 @@ func face_target_position(delta: float):
 		-direction.z
 	)
 
-	rotation.y = lerp_angle(
+	rotation.y = rotate_toward(
 		rotation.y,
 		target_rotation,
-		8.0 * delta
+		PI * delta 
 	)
 
 func face_movement_direction(delta: float):
@@ -145,10 +146,10 @@ func face_movement_direction(delta: float):
 			-horizontal_velocity.z
 		)
 
-		rotation.y = lerp_angle(
+		rotation.y = rotate_toward(
 			rotation.y,
 			target_rotation,
-			8.0 * delta
+			PI * delta 
 		)
 
 func set_target_position(new_target_position: Vector3):

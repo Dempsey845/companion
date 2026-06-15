@@ -48,11 +48,11 @@ func _on_combat_ended(npc: NPC):
     print("Combat!")
     if npc == target_manager.target:
         print("Combat ended!")
-        target_manager.try_start_combat_with_target(npc)
+        target_manager.try_start_combat_with_target.call_deferred(npc)
 
 func _on_target_death(_npc: NPC):
     if targets_combat_target and is_instance_valid(targets_combat_target):
-        target_manager.try_start_combat_with_target(targets_combat_target)
+        target_manager.try_start_combat_with_target.call_deferred(targets_combat_target)
     else:
         state_machine.change_state(idle_state)
 
