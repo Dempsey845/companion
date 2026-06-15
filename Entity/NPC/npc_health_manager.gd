@@ -8,3 +8,5 @@ func _ready() -> void:
 func _on_npc_died():
 	print("NPC DIED")
 	get_parent().queue_free()
+
+	

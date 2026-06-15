@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bnv8sb0jefmtj" path="res://Entity/NPC/npc_ai.tscn" id="4_8j60k"]
 [ext_resource type="Script" uid="uid://b4r82gll5mico" path="res://Singleton/points_of_interest.gd" id="5_5ukr8"]
 [ext_resource type="Script" uid="uid://dsnnflyfh225g" path="res://Entity/NPC/point_of_interest.gd" id="5_fo5ed"]
+[ext_resource type="Script" uid="uid://bkmgubapa0ufk" path="res://Managers/npc_manager.gd" id="7_o06y3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a02cp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -26,6 +27,9 @@ polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(4, 3, 5), PackedInt32Arr
 agent_radius = 1.0
 
 [node name="World" type="Node3D" unique_id=1436973986]
+
+[node name="NPCManager" type="Node" parent="." unique_id=1106848414]
+script = ExtResource("7_o06y3")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1134517119]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
@@ -68,6 +72,19 @@ material = ExtResource("3_5a7ea")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.4, -2.3, -1.6999998)
 operation = 2
 radius = 1.9
+material = ExtResource("2_go701")
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="NavigationRegion3D/CSGCombiner3D/CSGBox3D3" unique_id=1199795489]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.4, -1.9457256, -1.6999998)
+radius = 2.3
+height = 0.5
+material = ExtResource("2_go701")
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="NavigationRegion3D/CSGCombiner3D/CSGBox3D3" unique_id=1987541176]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.4, -1.9457256, -1.6999998)
+operation = 2
+radius = 2.0
+height = 0.5
 material = ExtResource("2_go701")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D" unique_id=2133305650]

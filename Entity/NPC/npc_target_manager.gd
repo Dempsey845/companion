@@ -2,6 +2,8 @@ class_name NPCTargetManager
 extends Node
 
 signal target_died
+signal started_combat(started_by: NPC, agaisnt: NPC)
+signal combat_ended(ended_by: NPC)
 
 enum TargetType
 {
@@ -24,6 +26,10 @@ var defender_agent_scene: PackedScene = preload("uid://doly0bktw68sy")
 var is_weapon_sheathed: bool = true
 var target: Node3D
 
+# TODO: Optimize this function
+func is_npc_in_combat(target_npc: NPC):
+	return target_npc.has_node("NPCCombatAgent") or target_npc.has_node("NPCDefenderAgent")
+
 func try_find_closest_target() -> bool:
 	if target:
 		return true
@@ -39,8 +45,8 @@ func try_find_closest_target() -> bool:
 
 		var target_type := get_current_target_type()
 		if target_type == TargetType.NPC:
-			# Create a npc combat agent
-			if target.has_node("NPCCombatAgent") or target.has_node("NPCDefenderAgent") or get_parent().has_node("NPCDefenderAgent"):
+			# Check to see if the target or this npc is already in combat
+			if is_npc_in_combat(target) or is_npc_in_combat(get_parent()):
 				return false
 
 			var combat_agent := combat_agent_scene.instantiate() as NPCCombatAgent
@@ -48,6 +54,8 @@ func try_find_closest_target() -> bool:
 
 			get_parent().add_child(combat_agent, true)
 			target.add_child(defender_agent_scene.instantiate(), true)
+
+			started_combat.emit(get_parent(), target)
 	else:
 		sheath_weapon()
 	
@@ -93,4 +101,5 @@ func can_attack() -> bool:
 
 func _on_target_died():
 	npc_state_machine.change_state(npc_idle_state)
+	combat_ended.emit(get_parent())
 	target_died.emit()

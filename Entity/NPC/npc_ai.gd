@@ -154,3 +154,12 @@ func jump():
 
 func is_target_in_range() -> bool:
 	return true
+
+func apply_knockback(source_position: Vector3, force: float, upward_force: float = 2.0):
+	var direction = global_position - source_position
+	direction.y = 0
+	direction = direction.normalized()
+
+	velocity.x = direction.x * force
+	velocity.z = direction.z * force
+	velocity.y = upward_force

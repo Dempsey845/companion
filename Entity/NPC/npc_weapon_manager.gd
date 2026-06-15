@@ -24,6 +24,9 @@ func equip():
 	if equipped:
 		return
 
+	var current_weapon_item: WeaponWorldItem = item_manager.current_world_item
+	current_weapon_item.hitbox.hit_hurtbox.connect(_on_current_weapon_hit_hurtbox)
+
 	equipped = true
 	
 func dequip():
@@ -58,3 +61,7 @@ func _attack():
 	var weapon_anim_length: float = weapon_animations[weapon_anim_name]["animation_length"]
 	humanoid_skeleton.play_upper_body_animation(weapon_anim_name, weapon_anim_length)
 	
+func _on_current_weapon_hit_hurtbox(hurtbox: Hurtbox):
+	if hurtbox.get_parent() is NPC:
+		var npc: NPC = hurtbox.get_parent()
+		npc.apply_knockback(get_parent().global_position, 8.0)
