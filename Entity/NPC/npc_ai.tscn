@@ -6,8 +6,12 @@
 [ext_resource type="Script" uid="uid://dsf4eco7yji27" path="res://Entity/NPC/npc_air_state.gd" id="3_5vso3"]
 [ext_resource type="Script" uid="uid://dwn3cfijy7xt" path="res://Entity/NPC/States/npc_idle_state.gd" id="3_cpmln"]
 [ext_resource type="Script" uid="uid://b8kguppsv37p5" path="res://Entity/NPC/States/npc_chase_state.gd" id="4_cpmln"]
+[ext_resource type="Script" uid="uid://crorvy30dtnlx" path="res://Entity/NPC/npc_target_manager.gd" id="4_ppcqs"]
+[ext_resource type="Script" uid="uid://dv0qxj2hb0vec" path="res://Entity/NPC/npc_combat_data.gd" id="5_lxnc2"]
 [ext_resource type="Script" uid="uid://corpwramldeuu" path="res://Entity/NPC/States/npc_wander_state.gd" id="5_wfllg"]
 [ext_resource type="PackedScene" uid="uid://cerbsxix0ryba" path="res://Entity/NPC/Humanoid/humanoid_skeleton.tscn" id="7_3y805"]
+[ext_resource type="Script" uid="uid://d0vif2jefuxn8" path="res://Entity/NPC/States/npc_attack_state.gd" id="8_n2son"]
+[ext_resource type="Script" uid="uid://b338yemjg6aum" path="res://StateMachine/state.gd" id="9_lxnc2"]
 [ext_resource type="Script" uid="uid://n16pks25wcsu" path="res://Entity/NPC/npc_weapon_manager.gd" id="9_tayem"]
 [ext_resource type="Script" uid="uid://4bmub7i6ig7h" path="res://Entity/NPC/npc_item_manager.gd" id="10_bcm3m"]
 [ext_resource type="Resource" uid="uid://c74dvywyw7wyj" path="res://Items/Weapons/Swords/iron_sword.tres" id="11_vasbk"]
@@ -43,6 +47,17 @@ script = ExtResource("3_5vso3")
 character_body = NodePath("..")
 metadata/_custom_type_script = "uid://dsf4eco7yji27"
 
+[node name="NPCTargetManager" type="Node" parent="." unique_id=1355157439 node_paths=PackedStringArray("npc", "target_search_area", "skeleton", "weapon_manager")]
+script = ExtResource("4_ppcqs")
+npc = NodePath("..")
+target_search_area = NodePath("../TargetSearchArea")
+skeleton = NodePath("../HumanoidSkeleton")
+weapon_manager = NodePath("../NPCWeaponManager")
+
+[node name="NPCCombatData" type="Node" parent="." unique_id=28659779]
+script = ExtResource("5_lxnc2")
+metadata/_custom_type_script = "uid://dv0qxj2hb0vec"
+
 [node name="StateMachine" type="Node" parent="." unique_id=2095926968 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("2_fmdth")
 initial_state = NodePath("WanderState")
@@ -52,23 +67,32 @@ metadata/_custom_type_script = "uid://cy8cw242qaxcb"
 script = ExtResource("3_cpmln")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
-[node name="ChaseState" type="Node" parent="StateMachine" unique_id=969530027 node_paths=PackedStringArray("weapon_manager", "skeleton", "target_search_area")]
+[node name="ChaseState" type="Node" parent="StateMachine" unique_id=969530027 node_paths=PackedStringArray("combat_data", "target_manager", "target_search_area")]
 script = ExtResource("4_cpmln")
-weapon_manager = NodePath("../../NPCWeaponManager")
-skeleton = NodePath("../../HumanoidSkeleton")
+combat_data = NodePath("../../NPCCombatData")
+target_manager = NodePath("../../NPCTargetManager")
 target_search_area = NodePath("../../TargetSearchArea")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
 [node name="TargetUpdateTimer" type="Timer" parent="StateMachine/ChaseState" unique_id=1949210494]
 wait_time = 0.2
 
-[node name="DistanceCheckTimer" type="Timer" parent="StateMachine/ChaseState" unique_id=1800656302]
-wait_time = 0.2
+[node name="AttackState" type="Node" parent="StateMachine" unique_id=781097642 node_paths=PackedStringArray("combat_data", "weapon_manager", "target_manager")]
+script = ExtResource("8_n2son")
+combat_data = NodePath("../../NPCCombatData")
+weapon_manager = NodePath("../../NPCWeaponManager")
+target_manager = NodePath("../../NPCTargetManager")
+metadata/_custom_type_script = "uid://b338yemjg6aum"
 
-[node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093 node_paths=PackedStringArray("target_search_area")]
+[node name="RetreatState" type="Node" parent="StateMachine" unique_id=52753964]
+script = ExtResource("9_lxnc2")
+metadata/_custom_type_script = "uid://b338yemjg6aum"
+
+[node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093 node_paths=PackedStringArray("target_search_area", "target_manager")]
 script = ExtResource("5_wfllg")
 wander_type = 1
 target_search_area = NodePath("../../TargetSearchArea")
+target_manager = NodePath("../../NPCTargetManager")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
 [node name="WaitTimer" type="Timer" parent="StateMachine/WanderState" unique_id=2079812908]

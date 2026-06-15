@@ -11,6 +11,7 @@ enum WanderType
 @export var wander_wait_time: float = 2.0
 @export var points_of_interest: PointsOfInterest
 @export var target_search_area: NPCTargetSearchArea
+@export var target_manager: NPCTargetManager
 
 @onready var wait_timer: Timer = $WaitTimer
 @onready var chase_state: Node = $"../ChaseState"
@@ -76,7 +77,5 @@ func _on_navigation_finished():
 	wait_timer.start()
 
 func _on_target_search_timer_timeout():
-	var closest_target := target_search_area.find_closest_target()
-	if closest_target:
-		chase_state.target = closest_target
+	if target_manager.try_find_closest_target():
 		state_machine.change_state(chase_state)
