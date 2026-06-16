@@ -16,7 +16,6 @@ enum WanderType
 
 @onready var wait_timer: Timer = $WaitTimer
 @onready var chase_state: Node = $"../ChaseState"
-@onready var target_search_timer: Timer = $TargetSearchTimer
 
 var destination: Vector3
 var current_poi: PointOfInterest
@@ -24,8 +23,6 @@ var current_poi: PointOfInterest
 func _ready() -> void:
 	wait_timer.timeout.connect(_on_wait_timer_timeout)
 	
-	target_search_timer.wait_time = randf_range(0.5, 1.5)
-	target_search_timer.timeout.connect(_on_target_search_timer_timeout)
 	
 	if points_of_interest == null:
 		points_of_interest = get_tree().get_nodes_in_group("points_of_interest").pick_random()
@@ -40,11 +37,9 @@ func enter():
 		push_error("This State is only compatible with NPC's!")
 
 	wait_timer.start()
-	target_search_timer.start()
 
 func exit():
 	wait_timer.stop()
-	target_search_timer.stop()
 
 func pick_new_destination() -> void:
 	match wander_type:
@@ -78,9 +73,3 @@ func _on_navigation_finished():
 		current_poi = null
 		
 	wait_timer.start()
-
-func _on_target_search_timer_timeout():
-	var closest_target = target_search_area.find_closest_target()
-	# if closest_target:
-	# 	target_manager.set_target(closest_target)
-	# 	target_search_timer.stop()

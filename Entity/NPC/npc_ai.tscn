@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://crorvy30dtnlx" path="res://Entity/NPC/npc_target_manager.gd" id="4_ppcqs"]
 [ext_resource type="Script" uid="uid://dv0qxj2hb0vec" path="res://Entity/NPC/npc_combat_data.gd" id="5_lxnc2"]
 [ext_resource type="Script" uid="uid://corpwramldeuu" path="res://Entity/NPC/States/npc_wander_state.gd" id="5_wfllg"]
+[ext_resource type="Script" uid="uid://tcl4hxfha78v" path="res://Entity/NPC/npc_combat_manager.gd" id="6_uwcyd"]
 [ext_resource type="PackedScene" uid="uid://cerbsxix0ryba" path="res://Entity/NPC/Humanoid/humanoid_skeleton.tscn" id="7_3y805"]
 [ext_resource type="Script" uid="uid://d0vif2jefuxn8" path="res://Entity/NPC/States/npc_attack_state.gd" id="8_n2son"]
 [ext_resource type="Script" uid="uid://n16pks25wcsu" path="res://Entity/NPC/npc_weapon_manager.gd" id="9_tayem"]
@@ -44,12 +45,15 @@ collision_mask = 15
 script = ExtResource("1_tifgv")
 jump_velocity = 4.5
 
-[node name="NPCHealthManager" type="Node" parent="." unique_id=124943862 node_paths=PackedStringArray("health")]
+[node name="NPCHealthManager" type="Node" parent="." unique_id=124943862 node_paths=PackedStringArray("health", "state_machine", "retreat_state")]
 script = ExtResource("2_dfvyj")
 health = NodePath("../Health")
+state_machine = NodePath("../StateMachine")
+retreat_state = NodePath("../StateMachine/RetreatState")
 
 [node name="Health" type="Node" parent="." unique_id=1743741218]
 script = ExtResource("2_84n1q")
+max_health = 3
 metadata/_custom_type_script = "uid://dk5ptg0c0fx3t"
 
 [node name="NPCAirState" type="Node" parent="." unique_id=590697671 node_paths=PackedStringArray("character_body")]
@@ -57,9 +61,20 @@ script = ExtResource("3_5vso3")
 character_body = NodePath("..")
 metadata/_custom_type_script = "uid://dsf4eco7yji27"
 
-[node name="NPCTargetManager" type="Node" parent="." unique_id=1355157439 node_paths=PackedStringArray("npc")]
+[node name="NPCTargetManager" type="Node" parent="." unique_id=1355157439 node_paths=PackedStringArray("npc", "health_manager")]
 script = ExtResource("4_ppcqs")
 npc = NodePath("..")
+health_manager = NodePath("../NPCHealthManager")
+
+[node name="NPCCombatManager" type="Node" parent="." unique_id=1610300449 node_paths=PackedStringArray("skeleton", "weapon_manager", "target_manager", "target_search_area", "state_machine", "chase_state", "wander_state")]
+script = ExtResource("6_uwcyd")
+skeleton = NodePath("../HumanoidSkeleton")
+weapon_manager = NodePath("../NPCWeaponManager")
+target_manager = NodePath("../NPCTargetManager")
+target_search_area = NodePath("../TargetSearchArea")
+state_machine = NodePath("../StateMachine")
+chase_state = NodePath("../StateMachine/ChaseState")
+wander_state = NodePath("../StateMachine/WanderState")
 
 [node name="NPCCombatData" type="Node" parent="." unique_id=28659779]
 script = ExtResource("5_lxnc2")

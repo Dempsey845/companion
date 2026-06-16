@@ -3,6 +3,9 @@ extends Node
 
 @export var npc: NPC
 
+@export var health_manager: NPCHealthManager
+
+
 var _target: Node3D
 var target: Node3D:
 	get():
@@ -27,12 +30,14 @@ func set_target(new_target: Node3D):
 			var target_health: Health = target.get_node("Health")
 			if not target_health.death.is_connected(_on_target_death):
 				target_health.death.connect(_on_target_death)
+				health_manager.start_retreat_on_low_health()
 
 func clear_target():
 	if target.has_node("Health"):
 		var target_health: Health = target.get_node("Health")
 		if target_health.death.is_connected(_on_target_death):
 			target_health.death.disconnect(_on_target_death)
+			health_manager.stop_retreat_on_low_health()
 
 	target = null
 	npc.clear_look_target()
