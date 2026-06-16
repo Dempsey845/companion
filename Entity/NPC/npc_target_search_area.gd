@@ -3,9 +3,10 @@ extends Area3D
 
 enum TargetFilter
 {
-	NPC,
 	Player,
-	Both
+	Warrior,
+	Both,
+	NPC
 }
 
 @export var target_filter: TargetFilter
@@ -17,10 +18,12 @@ func find_closest_target() -> Node3D:
 	overlapping_bodies = overlapping_bodies.filter(func(body): return body != get_parent())
 	
 	match target_filter:
-		TargetFilter.NPC:
-			overlapping_bodies = overlapping_bodies.filter(func(body): return body is NPC)
 		TargetFilter.Player:
 			overlapping_bodies = overlapping_bodies.filter(func(body): return body is Player)
+		TargetFilter.Warrior:
+			overlapping_bodies = overlapping_bodies.filter(func(body): return body is Warrior)
+		TargetFilter.NPC:
+			overlapping_bodies = overlapping_bodies.filter(func(body): return body is NPC and body is not Warrior)
 	
 	var closest_distance_sq := -1.0
 	var closest_target: Node3D = null

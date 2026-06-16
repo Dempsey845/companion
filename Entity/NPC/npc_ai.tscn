@@ -166,7 +166,7 @@ air_tracker = NodePath("../NPCAirState")
 
 [node name="TargetSearchArea" type="Area3D" parent="." unique_id=1651124830]
 collision_layer = 0
-collision_mask = 12
+collision_mask = 20
 monitorable = false
 script = ExtResource("12_vasbk")
 target_filter = 2
