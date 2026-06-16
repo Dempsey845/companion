@@ -18,6 +18,7 @@
 [ext_resource type="Resource" uid="uid://c74dvywyw7wyj" path="res://Items/Weapons/Swords/iron_sword.tres" id="11_vasbk"]
 [ext_resource type="Script" uid="uid://blk50mmexxv2" path="res://Entity/NPC/npc_target_search_area.gd" id="12_vasbk"]
 [ext_resource type="Script" uid="uid://bgd86grk1mhfm" path="res://Entity/NPC/States/npc_wait_to_attack_state.gd" id="13_2pdvb"]
+[ext_resource type="Script" uid="uid://tcl4hxfha78v" path="res://Entity/NPC/npc_combat_manager.gd" id="17_uwcyd"]
 [ext_resource type="Script" uid="uid://d106g5h1grs1w" path="res://Component/hurtbox_component.gd" id="18_5jw1p"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1sih6"]
@@ -44,13 +45,15 @@ collision_mask = 15
 script = ExtResource("1_tifgv")
 jump_velocity = 4.5
 
-[node name="NPCHealthManager" type="Node" parent="." unique_id=124943862 node_paths=PackedStringArray("health")]
+[node name="NPCHealthManager" type="Node" parent="." unique_id=124943862 node_paths=PackedStringArray("health", "combat_manager", "state_machine", "retreat_state")]
 script = ExtResource("2_dfvyj")
 health = NodePath("../Health")
+combat_manager = NodePath("../NPCCombatManager")
+state_machine = NodePath("../StateMachine")
+retreat_state = NodePath("../StateMachine/RetreatState")
 
 [node name="Health" type="Node" parent="." unique_id=1743741218]
 script = ExtResource("2_84n1q")
-max_health = 3
 metadata/_custom_type_script = "uid://dk5ptg0c0fx3t"
 
 [node name="NPCAirState" type="Node" parent="." unique_id=590697671 node_paths=PackedStringArray("character_body")]
@@ -58,15 +61,9 @@ script = ExtResource("3_5vso3")
 character_body = NodePath("..")
 metadata/_custom_type_script = "uid://dsf4eco7yji27"
 
-[node name="NPCTargetManager" type="Node" parent="." unique_id=1355157439 node_paths=PackedStringArray("npc", "target_search_area", "skeleton", "weapon_manager", "npc_state_machine", "npc_idle_state", "npc_wait_to_attack_state")]
+[node name="NPCTargetManager" type="Node" parent="." unique_id=1355157439 node_paths=PackedStringArray("npc")]
 script = ExtResource("4_ppcqs")
 npc = NodePath("..")
-target_search_area = NodePath("../TargetSearchArea")
-skeleton = NodePath("../HumanoidSkeleton")
-weapon_manager = NodePath("../NPCWeaponManager")
-npc_state_machine = NodePath("../StateMachine")
-npc_idle_state = NodePath("../StateMachine/IdleState")
-npc_wait_to_attack_state = NodePath("../StateMachine/WaitToAttackState")
 
 [node name="NPCCombatData" type="Node" parent="." unique_id=28659779]
 script = ExtResource("5_lxnc2")
@@ -77,8 +74,9 @@ script = ExtResource("2_fmdth")
 initial_state = NodePath("WanderState")
 metadata/_custom_type_script = "uid://cy8cw242qaxcb"
 
-[node name="IdleState" type="Node" parent="StateMachine" unique_id=756588674]
+[node name="IdleState" type="Node" parent="StateMachine" unique_id=756588674 node_paths=PackedStringArray("npc")]
 script = ExtResource("3_cpmln")
+npc = NodePath("../..")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
 [node name="ChaseState" type="Node" parent="StateMachine" unique_id=969530027 node_paths=PackedStringArray("combat_data", "target_manager", "target_search_area")]
@@ -91,12 +89,13 @@ metadata/_custom_type_script = "uid://b338yemjg6aum"
 [node name="TargetUpdateTimer" type="Timer" parent="StateMachine/ChaseState" unique_id=1949210494]
 wait_time = 0.2
 
-[node name="AttackState" type="Node" parent="StateMachine" unique_id=781097642 node_paths=PackedStringArray("weapon_manager", "target_manager", "combat_data", "chase_state")]
+[node name="AttackState" type="Node" parent="StateMachine" unique_id=781097642 node_paths=PackedStringArray("weapon_manager", "target_manager", "combat_data", "chase_state", "idle_state")]
 script = ExtResource("8_n2son")
 weapon_manager = NodePath("../../NPCWeaponManager")
 target_manager = NodePath("../../NPCTargetManager")
 combat_data = NodePath("../../NPCCombatData")
 chase_state = NodePath("../ChaseState")
+idle_state = NodePath("../IdleState")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
 [node name="RetreatState" type="Node" parent="StateMachine" unique_id=52753964 node_paths=PackedStringArray("target_manager", "chase_state", "idle_state")]
@@ -109,11 +108,12 @@ metadata/_custom_type_script = "uid://b338yemjg6aum"
 [node name="UpdateTimer" type="Timer" parent="StateMachine/RetreatState" unique_id=845221168]
 wait_time = 0.2
 
-[node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093 node_paths=PackedStringArray("target_search_area", "target_manager")]
+[node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093 node_paths=PackedStringArray("target_search_area", "target_manager", "combat_manager")]
 script = ExtResource("5_wfllg")
 wander_type = 1
 target_search_area = NodePath("../../TargetSearchArea")
 target_manager = NodePath("../../NPCTargetManager")
+combat_manager = NodePath("../../NPCCombatManager")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
 [node name="WaitTimer" type="Timer" parent="StateMachine/WanderState" unique_id=2079812908]
@@ -122,9 +122,12 @@ one_shot = true
 
 [node name="TargetSearchTimer" type="Timer" parent="StateMachine/WanderState" unique_id=391780086]
 
-[node name="WaitToAttackState" type="Node" parent="StateMachine" unique_id=1698147330 node_paths=PackedStringArray("target_manager")]
+[node name="WaitToAttackState" type="Node" parent="StateMachine" unique_id=1698147330 node_paths=PackedStringArray("npc", "target_manager", "combat_manager", "idle_state")]
 script = ExtResource("13_2pdvb")
+npc = NodePath("../..")
 target_manager = NodePath("../../NPCTargetManager")
+combat_manager = NodePath("../../NPCCombatManager")
+idle_state = NodePath("../IdleState")
 
 [node name="NPCWeaponManager" type="Node" parent="." unique_id=1915033598 node_paths=PackedStringArray("item_manager", "humanoid_skeleton")]
 script = ExtResource("9_tayem")
@@ -138,6 +141,17 @@ start_item = ExtResource("11_vasbk")
 
 [node name="ItemUseCooldownTimer" type="Timer" parent="NPCItemManager" unique_id=1081174297]
 one_shot = true
+
+[node name="NPCCombatManager" type="Node" parent="." unique_id=1220938498 node_paths=PackedStringArray("npc", "state_machine", "chase_state", "retreat_state", "wait_to_attack_state", "skeleton", "weapon_manager", "target_manager")]
+script = ExtResource("17_uwcyd")
+npc = NodePath("..")
+state_machine = NodePath("../StateMachine")
+chase_state = NodePath("../StateMachine/ChaseState")
+retreat_state = NodePath("../StateMachine/RetreatState")
+wait_to_attack_state = NodePath("../StateMachine/WaitToAttackState")
+skeleton = NodePath("../HumanoidSkeleton")
+weapon_manager = NodePath("../NPCWeaponManager")
+target_manager = NodePath("../NPCTargetManager")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1595698999]
 radius = 1.5
