@@ -15,7 +15,7 @@ func _ready() -> void:
 func enter():
 	if actor is not NPC:
 		push_error("This State is only compatible with NPC's!")
-		
+	
 	start_timers()
 	
 func start_timers():

@@ -1,8 +1,6 @@
 class_name NPCTargetManager
 extends Node
 
-signal target_changed
-
 @export var npc: NPC
 
 var _target: Node3D
@@ -11,7 +9,6 @@ var target: Node3D:
 		return _target
 	set(value):
 		_target = value
-		target_changed.emit()
 
 var target_time: float
 

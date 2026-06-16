@@ -6,7 +6,6 @@ signal attack_started
 @export var target_manager: NPCTargetManager
 @export var combat_data: NPCCombatData
 @export var chase_state: State
-@export var idle_state: State
 
 var attack_cooldown_time: float
 var change_state_independently: bool = true
@@ -27,7 +26,6 @@ func exit():
 
 func update(delta: float):
 	if target_manager.target == null or not is_instance_valid(target_manager.target):
-		state_machine.change_state(idle_state)
 		return
 
 	attack_cooldown_time -= delta
