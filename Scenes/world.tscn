@@ -3,10 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://ddp7y8rwb1paa" path="res://Entity/Player/player.tscn" id="1_a02cp"]
 [ext_resource type="Material" uid="uid://by0xvtseco15u" path="res://Prototype/prototype_grid.tres" id="2_go701"]
 [ext_resource type="Material" uid="uid://dt44nra4gjpf" path="res://Prototype/red_prototype_grid.tres" id="3_5a7ea"]
-[ext_resource type="PackedScene" uid="uid://bnv8sb0jefmtj" path="res://Entity/NPC/npc_ai.tscn" id="4_8j60k"]
 [ext_resource type="Script" uid="uid://b4r82gll5mico" path="res://Singleton/points_of_interest.gd" id="5_5ukr8"]
 [ext_resource type="Script" uid="uid://dsnnflyfh225g" path="res://Entity/NPC/point_of_interest.gd" id="5_fo5ed"]
-[ext_resource type="PackedScene" uid="uid://x65n7fdgs4j6" path="res://Entity/NPC/Warrior/warrior.tscn" id="7_o06y3"]
+[ext_resource type="PackedScene" uid="uid://ykbs778uqm5i" path="res://Entity/NPC/Humanoid/npc_humanoid.tscn" id="6_5ukr8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a02cp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -133,11 +132,8 @@ script = ExtResource("5_fo5ed")
 observation_duration = 3.0
 metadata/_custom_type_script = "uid://dsnnflyfh225g"
 
-[node name="NPC_AI" parent="." unique_id=1515252757 instance=ExtResource("4_8j60k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 3, 4)
+[node name="NPC_Humanoid" parent="." unique_id=1515252757 instance=ExtResource("6_5ukr8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
-[node name="NPC_AI2" parent="." unique_id=659543452 instance=ExtResource("4_8j60k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -2)
-
-[node name="Warrior" parent="." unique_id=2084977493 instance=ExtResource("7_o06y3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 3, 3)
+[node name="NPC_Humanoid2" parent="." unique_id=1307734271 instance=ExtResource("6_5ukr8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3, 0)

@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://ykbs778uqm5i"]
+
+[ext_resource type="PackedScene" uid="uid://bnv8sb0jefmtj" path="res://Entity/NPC/npc_ai.tscn" id="1_jotmj"]
+[ext_resource type="PackedScene" uid="uid://cerbsxix0ryba" path="res://Entity/NPC/Humanoid/humanoid_skeleton.tscn" id="2_to2x0"]
+
+[node name="NPC_Humanoid" unique_id=1515252757 instance=ExtResource("1_jotmj")]
+
+[node name="NPCItemManager" parent="Managers" parent_id_path=PackedInt32Array(671522078) index="4" unique_id=473636489 node_paths=PackedStringArray("skeleton")]
+skeleton = NodePath("../../HumanoidSkeleton")
+
+[node name="HumanoidSkeleton" parent="." index="14" unique_id=1950062957 node_paths=PackedStringArray("air_tracker", "weapon_manager", "combat_manager", "npc") instance=ExtResource("2_to2x0")]
+air_tracker = NodePath("../NPCAirState")
+weapon_manager = NodePath("../Managers/NPCWeaponManager")
+combat_manager = NodePath("../Managers/NPCCombatManager")
+npc = NodePath("..")

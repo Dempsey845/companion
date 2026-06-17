@@ -1,8 +1,10 @@
 class_name NPCWeaponManager
 extends Node
 
+signal attack(animation_name: String, animation_length: float)
+
+@export var npc: NPC
 @export var item_manager: NPCItemManager
-@export var humanoid_skeleton: HumanoidSkeleton
 
 var weapon_animations: Dictionary[String, Dictionary] = {
 	"Slash": {
@@ -25,12 +27,21 @@ func equip():
 		return
 
 	var current_weapon_item: WeaponWorldItem = item_manager.current_world_item
-	current_weapon_item.hitbox.hit_hurtbox.connect(_on_current_weapon_hit_hurtbox)
+	if is_instance_valid(current_weapon_item):
+		current_weapon_item.hitbox.hit_hurtbox.connect(_on_current_weapon_hit_hurtbox)
 
 	equipped = true
 	
 func dequip():
+	if not equipped:
+		return
+
 	equipped = false
+
+	var current_weapon_item: WeaponWorldItem = item_manager.current_world_item
+	if is_instance_valid(current_weapon_item):
+		current_weapon_item.hitbox.hit_hurtbox.disconnect(_on_current_weapon_hit_hurtbox)
+
 
 func is_current_item_weapon() -> bool:
 	if item_manager.current_world_item == null or not is_instance_valid(item_manager.current_world_item):
@@ -41,7 +52,7 @@ func is_current_item_weapon() -> bool:
 
 func try_use_current_weapon() -> bool:
 	if not is_current_item_weapon():
-		print("Current item is not a weapon")
+		push_warning("Current item is not a weapon")
 		return false
 	
 	return item_manager.try_use_current_item()
@@ -59,9 +70,9 @@ func _attack():
 	var weapon_resource = item_manager.current_world_item.item_resource as Weapon
 	var weapon_anim_name = weapon_type_animations[weapon_resource.weapon_type]
 	var weapon_anim_length: float = weapon_animations[weapon_anim_name]["animation_length"]
-	humanoid_skeleton.play_upper_body_animation(weapon_anim_name, weapon_anim_length)
+	attack.emit(weapon_anim_name, weapon_anim_length)
 	
 func _on_current_weapon_hit_hurtbox(hurtbox: Hurtbox):
 	if hurtbox.get_parent() is NPC:
-		var npc: NPC = hurtbox.get_parent()
-		npc.apply_knockback(get_parent().global_position, 4.0)
+		var hit_npc: NPC = hurtbox.get_parent()
+		hit_npc.apply_knockback(npc.global_position, 4.0)

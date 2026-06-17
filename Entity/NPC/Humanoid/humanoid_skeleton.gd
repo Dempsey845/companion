@@ -1,14 +1,17 @@
 class_name HumanoidSkeleton
-extends Node3D
+extends NPCSkeleton
 
-@export var npc: NPC
 @export var air_tracker: NPCAirState  
+@export var weapon_manager: NPCWeaponManager
+@export var combat_manager: NPCCombatManager
 
 @onready var animation_tree: AnimationTree = $AnimationTree
 
 var upper_body_state_machine: AnimationNodeStateMachinePlayback
 
 var playing_upper_body_animation: bool
+
+var is_weapon_sheathed: bool = true
 
 func _ready() -> void:
 	animation_tree.active = true
@@ -17,6 +20,11 @@ func _ready() -> void:
 	air_tracker.falling_ended.connect(_on_landed)
 	
 	npc.jump_started.connect(jump)
+
+	weapon_manager.attack.connect(func(animation_name, animation_length): play_upper_body_animation(animation_name, animation_length))
+
+	combat_manager.combat_target_found.connect(_withdraw_weapon)
+	combat_manager.combat_target_death.connect(_sheath_weapon)
 	
 	upper_body_state_machine = animation_tree.get(
 		"parameters/UpperBodyStateMachine/playback"
@@ -120,3 +128,30 @@ func stop_upper_body_blend(on_complete: Callable = Callable(), blend_time: float
 			on_complete.call()
 	)
 	
+
+func _withdraw_weapon():
+	if not is_weapon_sheathed:
+		return
+
+	is_weapon_sheathed = false
+	play_upper_body_animation("Sheath", 1.2)
+
+	await get_tree().create_timer(0.5).timeout
+	if not is_instance_valid(self):
+		return
+
+	weapon_manager.item_manager.requip_current_item(ItemSlotType.RightHand)
+
+
+func _sheath_weapon():
+	if is_weapon_sheathed:
+		return
+
+	is_weapon_sheathed = true
+	play_upper_body_animation("Sheath", 1.2)
+
+	await get_tree().create_timer(0.5).timeout
+	if not is_instance_valid(self):
+		return
+
+	weapon_manager.item_manager.requip_current_item(ItemSlotType.Back)

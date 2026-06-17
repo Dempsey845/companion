@@ -9,6 +9,10 @@ signal death(npc: NPC)
 @export var acceleration: float = 10.0
 @export var jump_velocity: float = 6.0
 
+@export var health: Health
+@export var state_machine: StateMachine
+@export var target_manager: NPCTargetManager
+
 var _move: bool
 var move: bool:
 	get:
@@ -27,9 +31,6 @@ var has_look_target := false
 
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var forward_ray: RayCast3D = $ForwardRay
-@onready var health: Health = $Health
-@onready var state_machine: StateMachine = $StateMachine
-@onready var target_manager: NPCTargetManager = $NPCTargetManager
 
 func _ready() -> void:
 	health.death.connect(func(): death.emit(self))
