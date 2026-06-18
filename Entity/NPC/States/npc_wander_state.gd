@@ -11,9 +11,6 @@ enum WanderType
 @export var wander_wait_time: float = 2.0
 @export var points_of_interest: PointsOfInterest
 
-@export var target_search_area: NPCTargetSearchArea
-@export var target_manager: NPCTargetManager
-
 @onready var wait_timer: Timer = $WaitTimer
 @onready var chase_state: Node = $"../ChaseState"
 

@@ -137,7 +137,7 @@ func _withdraw_weapon():
 	play_upper_body_animation("Sheath", 1.2)
 
 	await get_tree().create_timer(0.5).timeout
-	if not is_instance_valid(self):
+	if not is_instance_valid(self) or not is_instance_valid(weapon_manager):
 		return
 
 	weapon_manager.item_manager.requip_current_item(ItemSlotType.RightHand)
@@ -151,7 +151,7 @@ func _sheath_weapon():
 	play_upper_body_animation("Sheath", 1.2)
 
 	await get_tree().create_timer(0.5).timeout
-	if not is_instance_valid(self):
+	if not is_instance_valid(self) or not is_instance_valid(weapon_manager):
 		return
 
 	weapon_manager.item_manager.requip_current_item(ItemSlotType.Back)

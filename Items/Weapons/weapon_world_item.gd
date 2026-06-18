@@ -3,8 +3,12 @@ extends WorldItem
 
 @export_category("Melee")
 @export var hitbox: Hitbox
-@export var delay_before_can_damage: float = 0.5
-@export var hitbox_active_duration: float = 0.2
+
+func _ready() -> void:
+	var skeleton: NPCSkeleton = get_skeleton()
+
+	skeleton.attack_activate_weapon.connect(func(): hitbox.active = true)
+	skeleton.attack_disable_weapon.connect(func(): hitbox.active = false)
 
 func init(itm_resource: Item):
 	super.init(itm_resource)
@@ -15,15 +19,16 @@ func init(itm_resource: Item):
 	)
 	
 	hitbox.damage = itm_resource.damage
-	
+
+func get_skeleton() -> NPCSkeleton:
+	var item_slot = get_parent()
+	var item_attachment = item_slot.get_parent()
+	var skeleton_3d = item_attachment.get_parent()
+	return skeleton_3d.get_parent()
 
 func use_item():
-	if not hitbox:
-		push_error("No hitbox assigned. Weapon cannot be correctly used!")
-		return
+	# if not hitbox:
+	# 	push_error("No hitbox assigned. Weapon cannot be correctly used!")
+	# 	return
 	
-	await get_tree().create_timer(delay_before_can_damage).timeout
-	hitbox.active = true
-	
-	await get_tree().create_timer(hitbox_active_duration).timeout
-	hitbox.active = false
+	pass

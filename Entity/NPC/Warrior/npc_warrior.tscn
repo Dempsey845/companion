@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://bwnm5of1tudvc"]
+
+[ext_resource type="PackedScene" uid="uid://ykbs778uqm5i" path="res://Entity/NPC/Humanoid/npc_humanoid.tscn" id="1_32hji"]
+[ext_resource type="Script" uid="uid://cjlt3errsrpbb" path="res://Entity/NPC/Warrior/warrior.gd" id="2_hb8e7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hb8e7"]
+albedo_color = Color(0, 0.49411765, 1, 1)
+
+[node name="NPC_Warrior" unique_id=1515252757 instance=ExtResource("1_32hji")]
+collision_layer = 16
+script = ExtResource("2_hb8e7")
+
+[node name="TargetSearchArea" parent="." index="10" unique_id=1651124830]
+collision_mask = 8
+target_filter = 3
+
+[node name="Hurtbox" parent="." index="11" unique_id=2093081945]
+collision_layer = 16
+
+[node name="CombatStatusLabel" parent="." index="12" unique_id=1864761822]
+text = "Warrior"
+
+[node name="Skeleton3D" parent="HumanoidSkeleton" parent_id_path=PackedInt32Array(1950062957) index="0" unique_id=2020399624]
+bones/0/position = Vector3(-0.0028019235, 0.99764305, -0.0009542146)
+bones/0/rotation = Quaternion(0.017351592, -0.015490513, -0.023335973, 0.9994571)
+bones/1/rotation = Quaternion(0.005101836, -0.006165195, 0.019893387, 0.9997701)
+bones/2/rotation = Quaternion(0.05645499, -0.023530502, 0.022975395, 0.99786335)
+bones/3/rotation = Quaternion(0.056415353, -0.023515722, 0.022940958, 0.99786675)
+bones/4/rotation = Quaternion(0.01269494, 0.014424057, -0.0133649865, 0.9997261)
+bones/5/rotation = Quaternion(-0.10551865, 0.02802498, -0.022209754, 0.9937743)
+bones/7/rotation = Quaternion(-0.6218504, -0.37852138, 0.5314561, -0.43310294)
+bones/8/rotation = Quaternion(0.4708955, 0.101203516, -0.047557376, 0.87507355)
+bones/9/rotation = Quaternion(0.055046864, 0.0323158, 0.5617252, 0.8248578)
+bones/10/rotation = Quaternion(0.0022294247, -0.15685774, 0.12625378, 0.97951555)
+bones/11/rotation = Quaternion(0.23403278, 0.13340752, 0.08767425, 0.9590331)
+bones/12/rotation = Quaternion(-0.04307645, 0.03349099, 0.022439724, 0.9982581)
+bones/13/rotation = Quaternion(-0.11077984, -0.026170595, 0.06765434, 0.9911941)
+bones/15/rotation = Quaternion(0.41421074, 0.001817236, -0.015951162, 0.91003954)
+bones/16/rotation = Quaternion(0.4790514, -0.017068645, -0.04290542, 0.8765716)
+bones/17/rotation = Quaternion(-0.02642804, 0.00087874767, -0.012101977, 0.9995771)
+bones/19/rotation = Quaternion(0.60475653, -0.39366233, 0.5460027, 0.4256531)
+bones/20/rotation = Quaternion(0.3835412, -0.16258901, 0.10018092, 0.90356237)
+bones/21/rotation = Quaternion(0.048811708, -0.055533584, -0.45952648, 0.8850813)
+bones/22/rotation = Quaternion(0.0588284, 0.09926826, -0.04747008, 0.99218524)
+bones/23/rotation = Quaternion(0.22502871, -0.13864684, -0.08526261, 0.960661)
+bones/24/rotation = Quaternion(-0.025690684, -0.03054434, -0.016852936, 0.9990611)
+bones/25/rotation = Quaternion(-0.10410596, 0.01974835, -0.043779563, 0.99340594)
+bones/27/rotation = Quaternion(0.36423147, -0.02115584, 0.013849323, 0.9309651)
+bones/28/rotation = Quaternion(0.4843478, 0.017633514, 0.012605532, 0.87460697)
+bones/29/rotation = Quaternion(-0.052496307, -0.0009368975, 0.006463404, 0.9985998)
+bones/31/rotation = Quaternion(0.09175861, 0.061453912, 0.99329185, -0.03428016)
+bones/32/rotation = Quaternion(-0.56496674, -0.034815986, 0.08488371, 0.8199972)
+bones/33/rotation = Quaternion(0.6249627, 0.026035992, -0.007527572, 0.7801841)
+bones/34/rotation = Quaternion(0.26714534, -0.1558704, 0.0077435495, 0.9509353)
+bones/36/rotation = Quaternion(-0.06837901, 0.22420907, 0.9719577, -0.018789161)
+bones/37/rotation = Quaternion(-0.2766771, 0.038748503, -0.003596733, 0.9601746)
+bones/38/rotation = Quaternion(0.57854, -0.05052555, -0.03304766, 0.81341654)
+bones/39/rotation = Quaternion(0.29015273, 0.09706001, 0.019581616, 0.95184416)
+
+[node name="Cube" parent="HumanoidSkeleton/Skeleton3D" index="0" unique_id=739866932]
+material_override = SubResource("StandardMaterial3D_hb8e7")
+
+[node name="RightHandItemAttachment" parent="HumanoidSkeleton/Skeleton3D" index="1" unique_id=1440207064]
+transform = Transform3D(0.16568229, 0.14098991, 0.97604865, 0.36920738, -0.92661715, 0.07117707, 0.91445875, 0.34857163, -0.20557858, -0.40247178, 0.9161599, -0.049092762)
+
+[node name="BackItemAttachment" parent="HumanoidSkeleton/Skeleton3D" index="2" unique_id=2120642675]
+transform = Transform3D(0.9920123, -0.08163222, -0.096165195, 0.050301217, 0.95512795, -0.29189116, 0.11567778, 0.2847224, 0.9516048, -0.023225317, 1.6034434, 0.07331745)
+
+[editable path="HumanoidSkeleton"]

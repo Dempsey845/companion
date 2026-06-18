@@ -28,7 +28,7 @@ func exit():
 	update_timer.stop()
 
 func _on_update_timer_timeout():
-	if target_manager.target == null:
+	if !is_instance_valid(target_manager) or target_manager.target == null:
 		state_machine.change_state(idle_state)
 		return
 

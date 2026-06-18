@@ -26,7 +26,7 @@ func exit():
 	target_update_timer.stop()
 	
 func update(delta: float):
-	if target_manager.target == null or not is_instance_valid(target_manager.target):
+	if !is_instance_valid(target_manager) or target_manager.target == null or not is_instance_valid(target_manager.target):
 		return
 
 	var distance_to_target = actor.global_position.distance_to(target_manager.target.global_position)

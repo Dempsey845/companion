@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://b4r82gll5mico" path="res://Singleton/points_of_interest.gd" id="5_5ukr8"]
 [ext_resource type="Script" uid="uid://dsnnflyfh225g" path="res://Entity/NPC/point_of_interest.gd" id="5_fo5ed"]
 [ext_resource type="PackedScene" uid="uid://ykbs778uqm5i" path="res://Entity/NPC/Humanoid/npc_humanoid.tscn" id="6_5ukr8"]
+[ext_resource type="PackedScene" uid="uid://bwnm5of1tudvc" path="res://Entity/NPC/Warrior/npc_warrior.tscn" id="7_o06y3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a02cp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -137,3 +138,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
 [node name="NPC_Humanoid2" parent="." unique_id=1307734271 instance=ExtResource("6_5ukr8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3, 0)
+
+[node name="NPC_Warrior" parent="." unique_id=1524501023 instance=ExtResource("7_o06y3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 3)

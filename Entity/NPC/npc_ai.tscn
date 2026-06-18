@@ -51,24 +51,28 @@ target_manager = NodePath("Managers/NPCTargetManager")
 
 [node name="Managers" type="Node" parent="." unique_id=671522078]
 
-[node name="NPCHealthManager" type="Node" parent="Managers" unique_id=124943862 node_paths=PackedStringArray("health", "state_machine", "retreat_state")]
+[node name="NPCHealthManager" type="Node" parent="Managers" unique_id=124943862 node_paths=PackedStringArray("npc", "health", "state_machine", "retreat_state")]
 script = ExtResource("2_dfvyj")
+npc = NodePath("../..")
 health = NodePath("../../Health")
 state_machine = NodePath("../../StateMachine")
 retreat_state = NodePath("../../StateMachine/RetreatState")
 
-[node name="NPCTargetManager" type="Node" parent="Managers" unique_id=1355157439 node_paths=PackedStringArray("npc", "health_manager")]
+[node name="NPCTargetManager" type="Node" parent="Managers" unique_id=1355157439 node_paths=PackedStringArray("npc")]
 script = ExtResource("4_ppcqs")
 npc = NodePath("../..")
-health_manager = NodePath("../NPCHealthManager")
 
-[node name="NPCCombatManager" type="Node" parent="Managers" unique_id=1610300449 node_paths=PackedStringArray("target_manager", "target_search_area", "state_machine", "chase_state", "wander_state")]
+[node name="NPCCombatManager" type="Node" parent="Managers" unique_id=1610300449 node_paths=PackedStringArray("target_manager", "target_search_area", "health_manager", "state_machine", "chase_state", "wander_state")]
 script = ExtResource("6_uwcyd")
 target_manager = NodePath("../NPCTargetManager")
 target_search_area = NodePath("../../TargetSearchArea")
+health_manager = NodePath("../NPCHealthManager")
 state_machine = NodePath("../../StateMachine")
 chase_state = NodePath("../../StateMachine/ChaseState")
 wander_state = NodePath("../../StateMachine/WanderState")
+
+[node name="TargetSearchTimer" type="Timer" parent="Managers/NPCCombatManager" unique_id=743294663]
+wait_time = 2.0
 
 [node name="NPCWeaponManager" type="Node" parent="Managers" unique_id=1915033598 node_paths=PackedStringArray("npc", "item_manager")]
 script = ExtResource("9_tayem")
@@ -135,11 +139,9 @@ metadata/_custom_type_script = "uid://b338yemjg6aum"
 [node name="UpdateTimer" type="Timer" parent="StateMachine/RetreatState" unique_id=845221168]
 wait_time = 0.2
 
-[node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093 node_paths=PackedStringArray("target_search_area", "target_manager")]
+[node name="WanderState" type="Node" parent="StateMachine" unique_id=1982750093]
 script = ExtResource("5_wfllg")
 wander_type = 1
-target_search_area = NodePath("../../TargetSearchArea")
-target_manager = NodePath("../../Managers/NPCTargetManager")
 metadata/_custom_type_script = "uid://b338yemjg6aum"
 
 [node name="WaitTimer" type="Timer" parent="StateMachine/WanderState" unique_id=2079812908]
