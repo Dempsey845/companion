@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://crssfr18fd4hu" path="res://Entity/Player/player.gd" id="1_mc1dd"]
 [ext_resource type="Script" uid="uid://dk5ptg0c0fx3t" path="res://Component/health_component.gd" id="2_x1f5c"]
 [ext_resource type="Script" uid="uid://d106g5h1grs1w" path="res://Component/hurtbox_component.gd" id="3_qb0yx"]
+[ext_resource type="PackedScene" uid="uid://baclj0wtcu6rc" path="res://Entity/Player/arms.tscn" id="4_viyt1"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xclk5"]
 height = 2.15
@@ -27,6 +28,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.882, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=42900310]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.374)
+
+[node name="Arms" parent="Head/Camera3D" unique_id=1482823231 instance=ExtResource("4_viyt1")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -2, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=473420840]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
